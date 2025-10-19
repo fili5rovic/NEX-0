@@ -14,8 +14,6 @@ runBtn.addEventListener('click',(e)=>{
     let code = extractCode(editor.innerText);
     let lines = code.split('\n')
 
-    console.log(lines)
-
     for(const line of lines) {
         execute(line, cpu);
     }

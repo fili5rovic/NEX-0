@@ -12,11 +12,10 @@ body {
 .editor {
     background: #1e1e1e;
     color: #ccc;
-    border: 1px solid #555;
-    border-radius: 6px;
+    border: 1px solid gray;
     padding: 10px;
-    width: 600px;
-    height: 400px;
+    width: 300px;
+    height: 300px;
     overflow: hidden;
     outline: none;
 }
@@ -47,17 +46,23 @@ body {
 }
 
 table {
-    border: 1px white solid;
-    margin-right: 20px;
+    border: 1px gray solid;
+    width: 320px;
+    table-layout: fixed;
+    border-collapse: collapse;
 }
 
-td {
+td, th {
     text-align: center;
-    padding: 10px;
+    padding: 4px 0;
+    user-select: none;
 }
 
-td:nth-child(2) {
-    border-left: 1px gray solid;
+.button {
+    background-color: gray;
+    padding: 5px 10px;
 }
 
-
+.button:hover {
+    background-color: rgb(177, 177, 177);
+}

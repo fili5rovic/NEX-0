@@ -1,4 +1,4 @@
-const keywords = ['ADD', 'SUB', 'MUL', 'DIV'];
+const keywords = ['add', 'sub', 'mul', 'div','load','store'];
 
 export const highlight = (text) => {
     text = text
@@ -15,7 +15,3 @@ export const highlight = (text) => {
 
     return text;
 };
-
-document.querySelectorAll('td:first-child').forEach(td => {
-    td.style.userSelect = "none";
-});

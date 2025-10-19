@@ -1,11 +1,12 @@
-import CPU from './cpu.js';
+import { displayRegs } from '../ui/display.js';
 
 export function execute(line, cpu) {
     line = line.toLowerCase().trim();
     if (!line) return;
-
-    const parts = line.split(' ');
+    const parts = line.split(/\s+/);
     const instruction = parts[0];
+
+    console.log(parts)
 
     if (parts.length === 1) {
         switch (instruction) {
@@ -16,6 +17,9 @@ export function execute(line, cpu) {
                 break;
             case 'halt':
                 console.log('HALTED');
+                break;
+            default:
+                console.log('unknown')
                 break;
         }
         return;
@@ -31,6 +35,7 @@ export function execute(line, cpu) {
     } else {
         val = parseInt(op);
     }
+
 
     switch (instruction) {
         case 'add':
@@ -54,4 +59,5 @@ export function execute(line, cpu) {
             }
             break;
     }
+    console.log(cpu.getAcc())
 }

@@ -2,12 +2,14 @@ import { highlight } from "./highlight.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const editor = document.querySelector("#editor");
-    const maxLinesInEditor = 27;
+    const maxLinesInEditor = 17;
 
     const update = () => {
         const selection = window.getSelection();
+        if (!selection || selection.rangeCount === 0) {
+            return;
+        }
         const range = selection.getRangeAt(0);
-        const cursorOffset = range.startOffset;
 
         const text = editor.innerText;
         const highlighted = highlight(text).replace(/\n/g, "<br>");
