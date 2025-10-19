@@ -1,42 +1,53 @@
-import { displayRegs } from '../ui/display.js';
 
 export function execute(line, cpu) {
     line = line.toLowerCase().trim();
     if (!line) return;
     const parts = line.split(/\s+/);
     const instruction = parts[0];
+    const operand = parts[1];
 
-    console.log(parts)
 
-    if (parts.length === 1) {
-        switch (instruction) {
-            case 'neg':
-                cpu.setAcc(-cpu.getAcc());
-                break;
-            case 'nop':
-                break;
-            case 'halt':
-                console.log('HALTED');
-                break;
-            default:
-                console.log('unknown')
-                break;
-        }
+    if (!operand) {
+        zeroOperandExecution(instruction, cpu);
         return;
     }
 
-    const op = parts[1];
-    let val = 0;
-    let index = -1;
+    const { value, regIndex } = parseOperand(operand, cpu);
 
-    if (op.includes('r')) {
-        index = parseInt(op.replace('r', ''));
-        val = cpu.getReg(index);
-    } else {
-        val = parseInt(op);
+
+
+    oneOperandExecution(instruction, cpu, value, regIndex);
+}
+
+function parseOperand(operand, cpu) {
+    const isRegister = operand.startsWith('r');
+
+    if (isRegister) {
+        const regIndex = parseInt(operand.slice(1));
+        return { value: cpu.getReg(regIndex), regIndex };
     }
 
+    return { value: parseInt(operand), regIndex: null };
+}
 
+
+function zeroOperandExecution(instruction, cpu) {
+    switch (instruction) {
+        case 'neg':
+            cpu.setAcc(-cpu.getAcc());
+            break;
+        case 'nop':
+            break;
+        case 'halt':
+            cpu.sendHalt();
+            break;
+        default:
+            console.log('unknown');
+            break;
+    }
+}
+
+function oneOperandExecution(instruction, cpu, val, index) {
     switch (instruction) {
         case 'add':
             cpu.setAcc(cpu.getAcc() + val);
@@ -54,10 +65,9 @@ export function execute(line, cpu) {
             cpu.setAcc(val);
             break;
         case 'store':
-            if (index !== -1) {
+            if (index !== null) {
                 cpu.setReg(index, cpu.getAcc());
             }
             break;
     }
-    console.log(cpu.getAcc())
 }

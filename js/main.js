@@ -15,6 +15,8 @@ runBtn.addEventListener('click',(e)=>{
     let lines = code.split('\n')
 
     for(const line of lines) {
+        if(cpu.isHalted())
+            break;
         execute(line, cpu);
     }
     displayRegs(cpu)

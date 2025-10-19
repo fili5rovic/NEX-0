@@ -1,4 +1,4 @@
-const keywords = ['add', 'sub', 'mul', 'div','load','store'];
+const keywords = ['add', 'sub', 'mul', 'div','load','store', 'neg','nop','halt'];
 
 export const highlight = (text) => {
     text = text

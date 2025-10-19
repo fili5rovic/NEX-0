@@ -2,7 +2,7 @@ import { highlight } from "./highlight.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const editor = document.querySelector("#editor");
-    const maxLinesInEditor = 17;
+    const maxLinesInEditor = 21;
 
     const update = () => {
         const selection = window.getSelection();
