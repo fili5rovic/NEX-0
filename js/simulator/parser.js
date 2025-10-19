@@ -9,6 +9,25 @@ export function checkSyntax(lines) {
     return null;
 }
 
+export function extractCode(text) {
+    let code = removeComments(text);
+    code = normalizeWhitespace(code);
+    code = trimSpacesTabs(code);
+    return code;
+}
+
+export function getLabelsMap(lines) {
+    const map = new Map();
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (/^\w+:.*$/.test(line)) {
+            map.set(line.split(':')[0], i);
+        }
+    }
+
+    return map;
+}
 
 
 function removeComments(code) {
@@ -23,9 +42,3 @@ function trimSpacesTabs(code) {
     return code.replace(/^[ \t]+|[ \t]+$/g, '');
 }
 
-export function extractCode(text) {
-    let code = removeComments(text);
-    code = normalizeWhitespace(code);
-    code = trimSpacesTabs(code);
-    return code;
-}
