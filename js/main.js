@@ -10,8 +10,6 @@ let executor = new Executor(cpu);
 const runBtn = document.querySelector('#runBtn');
 const editor = document.querySelector('#editor');
 
-
-
 runBtn.addEventListener('click',(e)=>{
     let code = extractCode(editor.innerText);
     let lines = code.split('\n')

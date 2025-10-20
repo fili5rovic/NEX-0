@@ -9,8 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!selection || selection.rangeCount === 0) {
             return;
         }
-        const range = selection.getRangeAt(0);
-
         const text = editor.innerText;
         const highlighted = highlight(text).replace(/\n/g, "<br>");
 

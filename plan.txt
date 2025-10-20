@@ -1,0 +1,12 @@
+Ideja projekta jeste da se podrze razlicite sintakse.
+Zapravo, glavni cilj bi bila komunikacija sa razlicitim prozorima,
+gde bi neki bio na primer troadresna, a drugi jednoadresna masina.
+
+Primera radi, neka jednoadresna masina na svoj IN prima razlicite temperature,
+a dalje salje samo temperature koje su u nekom opsegu, na primer od 0 do 30 stepeni.
+
+Tako mogu napraviti razlicite masine koje cak imaju i razlicitu sintaksu.
+
+Trenutno je ovo veca neka slika, a kasnije bih mogao da dodam i masine koje 
+imaju samo jednu instrukciju, slicno kao sto ima igrica SIC-1, 
+gde jedna instrukcija radi sve.

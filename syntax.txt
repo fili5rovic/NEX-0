@@ -1,7 +1,0 @@
-Jednoadresna masina
-
-LOAD  R1   ; AC = R1
-ADD   R2   ; AC = AC + R2
-STORE R3   ; R3 = AC
-
-REGS 0-7, size = 1 byte (-128,127)
