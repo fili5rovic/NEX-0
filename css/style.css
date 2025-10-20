@@ -1,37 +1,74 @@
-body {
-    background: #1e1e1e;
-    color: #ccc;
-    font-family: monospace;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.editor {
+body {
+    font-family: Arial, sans-serif;
     background: #1e1e1e;
-    color: #ccc;
-    border: 1px solid gray;
-    padding: 10px;
+}
+
+#editor-container {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    height: 300px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #2d2d2d;
+}
+
+#editor,
+#highlight-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 300px;
     height: 300px;
-    overflow: hidden;
+    padding: 15px;
+    margin: 0;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 0;
+    word-spacing: 0;
+    tab-size: 4;
+    white-space: pre;
+    overflow: auto;
+    border: none;
     outline: none;
 }
 
-.keyword {
-    color: #569cd6;
+#editor {
+    color: transparent;
+    background: transparent;
+    caret-color: white;
+    resize: none;
+    z-index: 2;
+    -webkit-text-fill-color: transparent;
 }
 
-.reg {
-    color: #4ec9b0;
+#highlight-layer {
+    color: #d4d4d4;
+    z-index: 1;
+    pointer-events: none;
 }
 
-.num {
-    color: #b5cea8;
+#highlight-layer code {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    word-spacing: inherit;
 }
 
-.comment {
-    color: #6a9955;
-    font-style: italic;
-}
-
+.keyword { color: #569cd6; }
+.comment { color: #6a9955; }
+.register { color: #9cdcfe; }
+.number { color: #b5cea8; }
 
 .cpu-wrapper {
     display: flex;
@@ -49,6 +86,8 @@ table {
 
 td,
 th {
+    font-size:12px;
+    color: gray;
     text-align: center;
     padding: 4px 0;
     user-select: none;

@@ -11,7 +11,8 @@ const runBtn = document.querySelector('#runBtn');
 const editor = document.querySelector('#editor');
 
 runBtn.addEventListener('click',(e)=>{
-    let code = extractCode(editor.innerText);
+    let code = extractCode(editor.value);
+    console.log(code);
     let lines = code.split('\n')
 
     executor.run(lines);

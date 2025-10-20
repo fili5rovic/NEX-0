@@ -1,36 +1,33 @@
-import { highlight } from "./highlight.js";
+const editor = document.getElementById('editor');
+const highlightedCode = document.getElementById('highlighted-code');
 
-document.addEventListener('DOMContentLoaded', () => {
-    const editor = document.querySelector("#editor");
-    const maxLinesInEditor = 21;
+function highlight(text) {
+    // Escape HTML
+    text = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 
-    const update = () => {
-        const selection = window.getSelection();
-        if (!selection || selection.rangeCount === 0) {
-            return;
-        }
-        const text = editor.innerText;
-        const highlighted = highlight(text).replace(/\n/g, "<br>");
+    // Highlight patterns
+    text = text.replace(/(#.*$)/gm, '<span class="comment">$1</span>');
+    text = text.replace(/\b(add|sub|mul|div|load|store|neg|nop|halt|jmp|jz|jnz|jg|jge|jl|jle)\b/gi, '<span class="keyword">$1</span>');
+    text = text.replace(/\b([Rr][0-9]+)\b/g, '<span class="register">$1</span>');
+    text = text.replace(/(#?\b\d+\b|0x[0-9A-Fa-f]+)/g, '<span class="number">$1</span>');
 
-        editor.innerHTML = highlighted;
+    return text;
+}
 
-        const newRange = document.createRange();
-        const lastNode = editor.lastChild;
-        if (lastNode) {
-            newRange.setStartAfter(lastNode);
-            newRange.collapse(true);
-            selection.removeAllRanges();
-            selection.addRange(newRange);
-        }
-    };
+function updateHighlight() {
+    const text = editor.value;
+    highlightedCode.innerHTML = highlight(text) + '\n';
+}
 
-    editor.addEventListener("input", () => {
-        const lines = editor.innerText.split('\n');
-        if (lines.length > maxLinesInEditor) {
-            editor.innerText = lines.slice(0, maxLinesInEditor).join('\n');
-        }
-        update();
-    });
-
-    update();
+editor.addEventListener('scroll', () => {
+    const highlightLayer = document.getElementById('highlight-layer');
+    highlightLayer.scrollTop = editor.scrollTop;
+    highlightLayer.scrollLeft = editor.scrollLeft;
 });
+
+editor.addEventListener('input', updateHighlight);
+
+updateHighlight();
