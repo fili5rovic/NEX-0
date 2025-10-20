@@ -1,19 +1,13 @@
 import CPU from '../js/simulator/cpu.js';
-import Executor from './simulator/executor.js'
 import { extractCode, getLabelsMap } from './simulator/parser.js';
 import '../js/editor/editor.js'
-
-let cpu = new CPU();
-
-let executor = new Executor(cpu);
+import {OneAddrArchitecture} from './architecture/architecture.js'
+let cpu = new CPU(new OneAddrArchitecture());
 
 const runBtn = document.querySelector('#runBtn');
 const editor = document.querySelector('#editor');
 
-runBtn.addEventListener('click',(e)=>{
+runBtn.addEventListener('click',()=>{
     let code = extractCode(editor.value);
-    console.log(code);
-    let lines = code.split('\n')
-
-    executor.run(lines);
+    cpu.runCode(code);
 })

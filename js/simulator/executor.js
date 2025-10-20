@@ -92,7 +92,6 @@ class Executor {
             case 'jg':
                 if (acc > 0)
                     this.nextJump = nextIndex;
-                console.log('nextjump: ' + this.nextJump)
                 break;
             case 'jge':
                 if (acc >= 0)

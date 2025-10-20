@@ -1,10 +1,19 @@
-class CPU {
-    constructor() {
-        this.regSize = 1;
+import Executor from "./executor.js";
 
-        this.regs = [0, 0, 0, 0, 0, 0, 0, 0];
+class CPU {
+    constructor(architecture) {
+        this.architecture = architecture;
+        this.executor = new Executor(this);
+        
+        this.regs = this.architecture.getGeneralRegisters();
         this.acc = 0;
         this.halted = false;
+        this.regSize = 1;
+    }
+
+    runCode(code) {
+        let lines = code.split('\n');
+        this.executor.run(lines);
     }
 
     reset() {

@@ -12,9 +12,13 @@ class Architecture {
     validateInstruction(instruction) {
         throw new Error('Abstract method must be implemented');
     }
+
+    getGeneralRegisters() {
+        throw new Error('Abstract')
+    }
 }
 
-class OneAddrArchitecture extends Architecture {
+export class OneAddrArchitecture extends Architecture {
     constructor() {
         super();
         this.keywords = [
@@ -25,6 +29,10 @@ class OneAddrArchitecture extends Architecture {
 
     getKeywords() {
         return this.keywords;
+    }
+
+    getGeneralRegisters() {
+        return Array(8).fill(0)
     }
 
     validateInstruction(instruction) {
