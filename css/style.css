@@ -78,6 +78,13 @@ body {
     gap: 5px;
 }
 
+.controls {
+    background-color: #2d2d2d;
+    padding: 2px 0px;
+    width: 320px;
+    text-align: center;
+}
+
 table {
     border: 1px gray solid;
     width: 320px;

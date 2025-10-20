@@ -15,7 +15,6 @@ class Executor {
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
-            console.log('executing: ' + line);
             this.execute(line, this.cpu);
             if (this.cpu.isHalted())
                 break;

@@ -27,7 +27,7 @@ export class EditorHandler {
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;");
 
-        const commentRegex = /(#.*$)/gm;
+        const commentRegex = /(;.*$)/gm;
         text = text.replace(commentRegex, '<span class="comment">$1</span>');
         const keywordRegex = /\b(add|sub|mul|div|load|store|neg|nop|halt|jmp|jz|jnz|jg|jge|jl|jle)\b/gi;
         text = text.replace(keywordRegex, '<span class="keyword">$1</span>');

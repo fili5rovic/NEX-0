@@ -1,14 +1,3 @@
-export function checkSyntax(lines) {
-    for (line of lines) {
-        line = line.toLowerCase();
-        oneArg = /^(\w+) (r\d|\d+)$/.test(line);
-        zeroArg = /^(neg|push|pop|halt|nop)$/.test(line);
-        if (!oneArg && !zeroArg)
-            return line;
-    }
-    return null;
-}
-
 export function extractCode(text) {
     let code = removeComments(text);
     code = normalizeWhitespace(code);
@@ -31,7 +20,7 @@ export function getLabelsMap(lines) {
 
 
 function removeComments(code) {
-    return code.replace(/#.*$/gm, '');
+    return code.replace(/;.*$/gm, '');
 }
 
 function normalizeWhitespace(code) {
