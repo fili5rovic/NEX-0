@@ -10,3 +10,11 @@ Tako mogu napraviti razlicite masine koje cak imaju i razlicitu sintaksu.
 Trenutno je ovo veca neka slika, a kasnije bih mogao da dodam i masine koje 
 imaju samo jednu instrukciju, slicno kao sto ima igrica SIC-1, 
 gde jedna instrukcija radi sve.
+
+Takodje neki zanimljivi primeri:
+- Procesori kojima su neki registri unisteni
+- Procesori kojima neki parovi registra rade brze
+- Procesori koji nemaju odredjene instrukcije
+- Procesori koji su specijalizovani za instrukcije (npr. mul radi 10x brze nego na ostalim)
+
+I onda moze level na primer da bude da se korisniku daju samo odredjeni procesori za neke zadatke
