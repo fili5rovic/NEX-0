@@ -1,4 +1,4 @@
-import { getLabelsMap } from "./parser.js";
+import { getLabelsMap, removeLabelsFromLine } from "./parser.js";
 
 class Executor {
 
@@ -11,6 +11,7 @@ class Executor {
 
     async run(lines) {
         this.labelMap = getLabelsMap(lines);
+        console.log(this.labelMap);
         this.nextJump = null;
 
         for (let i = 0; i < lines.length; i++) {
@@ -29,7 +30,9 @@ class Executor {
     }
 
     async execute(line, cpu) {
+        line = removeLabelsFromLine(line);
         line = line.toLowerCase().trim();
+        console.log(line);
         if (!line) return;
         const parts = line.split(/\s+/);
         const instruction = parts[0];
@@ -76,7 +79,9 @@ class Executor {
 
     jumpInstruction(instruction, operand, cpu) {
         let nextIndex = this.labelMap.get(operand);
-        if (!nextIndex) {
+        nextIndex--;
+        console.log("next index: " + nextIndex)
+        if (isNaN(nextIndex)) {
             console.warn('label does not exist');
             return;
         }

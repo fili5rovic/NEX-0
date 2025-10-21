@@ -1,3 +1,5 @@
+@import url('syntax.css');
+
 * {
     margin: 0;
     padding: 0;
@@ -7,6 +9,11 @@
 body {
     font-family: Arial, sans-serif;
     background: #1e1e1e;
+}
+
+h1 {
+    text-align: center;
+    color: white;
 }
 
 #editor-container {
@@ -65,13 +72,6 @@ body {
     letter-spacing: inherit;
     word-spacing: inherit;
 }
-
-
-
-.keyword { color: #569cd6; }
-.comment { color: #6a9955; }
-.register { color: #9cdcfe; }
-.number { color: #b5cea8; }
 
 .cpu-wrapper {
     display: flex;
