@@ -82,8 +82,11 @@ body {
 
 .controls {
     background-color: #2d2d2d;
-    padding: 2px 0px;
+    padding: 8px 0px;
     width: 320px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    gap: 8px;
     text-align: center;
 }
 
@@ -103,13 +106,13 @@ td,th {
 }
 
 td.changed, th.changed {
-    background-color: rgb(153, 108, 108);
+    background-color: rgba(33, 150, 243, 0.12);
     animation: highlight 1s ease forwards;
 }
 
 @keyframes highlight {
     0% {
-        background-color: rgb(153, 108, 108);
+        background-color: rgba(33, 150, 243, 0.12);
     }
     100% {
         background-color: transparent;
@@ -125,13 +128,20 @@ td.changed, th.changed {
 
 
 .button {
-    background-color: gray;
-    padding: 5px 10px;
+    background: linear-gradient(180deg, #3a3a3a 0%, #2d2d2d 100%);
+    border: 1px solid #555;
+    color: gray;
+    padding: 8px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
 }
 
 .button:hover {
-    background-color: rgb(177, 177, 177);
+    background: linear-gradient(180deg, #4a4a4a 0%, #3a3a3a 100%);
+    border-color: #666;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+    transform: translateY(-1px);
 }
-
-
-
