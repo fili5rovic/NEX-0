@@ -18,6 +18,15 @@ export function getLabelsMap(lines) {
     return map;
 }
 
+function removeLabels(lines) {
+    let ret = []
+    for(line of lines) {
+        line = line.replace(/^\w+:/,'');
+        ret.push(line)
+    }
+    return ret;
+}
+
 
 function removeComments(code) {
     return code.replace(/;.*$/gm, '');

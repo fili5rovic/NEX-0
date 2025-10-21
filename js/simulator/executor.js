@@ -1,4 +1,3 @@
-import { displayRegs } from "../ui/display.js";
 import { getLabelsMap } from "./parser.js";
 
 class Executor {
@@ -7,15 +6,19 @@ class Executor {
         this.cpu = cpu;
         this.labelMap = null;
         this.nextJump = null;
+        this.delay = 1000;
+
+        this.currLineExecuting = 0;
     }
 
-    run(lines) {
+    async run(lines) {
         this.labelMap = getLabelsMap(lines);
         this.nextJump = null;
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
-            this.execute(line, this.cpu);
+            this.currLineExecuting = i;
+            await this.execute(line, this.cpu);
             if (this.cpu.isHalted())
                 break;
             if (this.nextJump !== null) {
@@ -24,31 +27,37 @@ class Executor {
             }
 
         }
-        displayRegs(this.cpu);
+        this.cpu.dispatchEvent(new CustomEvent('instruction-all-executed', {}));
     }
 
-    execute(line, cpu) {
+    async execute(line, cpu) {
         line = line.toLowerCase().trim();
         if (!line) return;
         const parts = line.split(/\s+/);
         const instruction = parts[0];
         const operand = parts[1];
 
+        const lineNumber = this.currLineExecuting;
 
         if (!operand) {
             this.zeroOperandExecution(instruction, cpu);
-            return;
-        }
-
-        if (isJumpInstruction(instruction)) {
+        } else if (isJumpInstruction(instruction)) {
             this.jumpInstruction(instruction, operand, cpu);
-            return;
+        } else {
+            const { value, regIndex } = parseOperand(operand, cpu);
+            this.oneOperandExecution(instruction, cpu, value, regIndex);
         }
 
-        const { value, regIndex } = parseOperand(operand, cpu);
+        cpu.dispatchEvent(new CustomEvent('instruction-executing', {
+            detail: { line, lineNumber, instruction, operand }
+        }));
 
 
-        this.oneOperandExecution(instruction, cpu, value, regIndex);
+        await this.sleep(this.delay);
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     zeroOperandExecution(instruction, cpu) {

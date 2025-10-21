@@ -1,7 +1,8 @@
 import Executor from "./executor.js";
 
-class CPU {
+class CPU extends EventTarget {
     constructor(architecture) {
+        super();
         this.architecture = architecture;
         this.executor = new Executor(this);
         
@@ -11,14 +12,15 @@ class CPU {
         this.regSize = 1;
     }
 
-    runCode(code) {
+    async runCode(code) {
         let lines = code.split('\n');
-        this.executor.run(lines);
+        await this.executor.run(lines);
     }
 
     reset() {
         this.regs.fill(0)
         this.acc = 0;
+        this.halted = false;
     }
 
     getReg(index) {

@@ -1,14 +1,35 @@
 export class EditorHandler {
-     constructor(cpu, editor, highlightedCode, highlightLayer) {
+    constructor(cpu, editor, highlightedCode, highlightLayer) {
         this.cpu = cpu;
         this.editor = editor;
         this.highlightedCode = highlightedCode;
         this.highlightLayer = highlightLayer
 
+        this.currentLineIndex = null;
+
         this.editor.addEventListener('input', this.updateHighlight);
+        this.editor.addEventListener('keydown', this.handleTab);
         this.editor.addEventListener('scroll', this.handleScroll);
 
         this.updateHighlight();
+    }
+
+    handleTab = (e) => {
+        if (e.key === 'Tab') {
+            e.preventDefault();
+
+            const start = this.editor.selectionStart;
+            const end = this.editor.selectionEnd;
+            const value = this.editor.value;
+
+            this.editor.value = value.substring(0, start) + '\t' + value.substring(end);
+
+            this.editor.selectionStart = this.editor.selectionEnd = start + 1;
+
+            this.updateHighlight();
+
+            this.editor.dispatchEvent(new Event('input'));
+        }
     }
 
     handleScroll = () => {
@@ -18,7 +39,23 @@ export class EditorHandler {
 
     updateHighlight = () => {
         const text = this.editor.value;
-        this.highlightedCode.innerHTML = this.highlight(text) + '\n';
+        this.highlightedCode.innerHTML = this.highlightWithCurrentLine(text);
+    }
+
+    highlightWithCurrentLine(text) {
+        const lines = text.split('\n');
+
+        const highlightedLines = lines.map((line, index) => {
+            const highlightedLine = this.highlight(line);
+
+            if (index === this.currentLineIndex) {
+                return `<span class="current-line">${highlightedLine}</span>`;
+            }
+
+            return highlightedLine;
+        });
+
+        return highlightedLines.join('\n') + '\n';
     }
 
     highlight(text) {
@@ -39,9 +76,22 @@ export class EditorHandler {
         return text;
     }
 
-    updateHighlight() {
-        const text = this.editor.value;
-        this.highlightedCode.innerHTML = this.highlight(text) + '\n';
+    setCurrentLine(lineNumber) {
+        this.currentLineIndex = lineNumber;
+        this.updateHighlight();
+        this.scrollToLine(lineNumber);
+    }
+
+    clearCurrentLine() {
+        this.currentLineIndex = null;
+        this.updateHighlight();
+    }
+
+    scrollToLine(lineNumber) {
+        const lineHeight = parseFloat(getComputedStyle(this.editor).lineHeight);
+        const scrollTop = lineNumber * lineHeight - this.editor.clientHeight / 2;
+        this.editor.scrollTop = Math.max(0, scrollTop);
+        this.handleScroll();
     }
 }
 
