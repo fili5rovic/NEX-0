@@ -91,18 +91,25 @@ body {
 }
 
 table {
-    border: 1px gray solid;
+    border: 1px solid #444;
     width: 320px;
     table-layout: fixed;
     border-collapse: collapse;
+    background: linear-gradient(180deg, #2d2d2d 0%, #252525 100%);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 td,th {
-    font-size:12px;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
     color: gray;
     text-align: center;
-    padding: 4px 0;
+    padding: 6px 4px;
     user-select: none;
+    border-bottom: 1px solid #333;
+    background-color: #2d2d2d;
 }
 
 td.changed, th.changed {
@@ -115,7 +122,7 @@ td.changed, th.changed {
         background-color: rgba(33, 150, 243, 0.12);
     }
     100% {
-        background-color: transparent;
+        background-color: #2d2d2d;
     }
 }
 
@@ -143,5 +150,5 @@ td.changed, th.changed {
     background: linear-gradient(180deg, #4a4a4a 0%, #3a3a3a 100%);
     border-color: #666;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
-    transform: translateY(-1px);
+    transform: translateY(1px);
 }
