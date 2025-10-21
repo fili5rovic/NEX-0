@@ -1,3 +1,4 @@
+import { RegisterBank } from "../registers/register-bank.js";
 import Executor from "./executor.js";
 
 class CPU extends EventTarget {
@@ -7,6 +8,7 @@ class CPU extends EventTarget {
         this.executor = new Executor(this);
         
         this.regs = this.architecture.getGeneralRegisters();
+        this.registerBank = new RegisterBank(this.architecture.regsConfig());
         this.acc = 0;
         this.halted = false;
         this.regSize = 1;

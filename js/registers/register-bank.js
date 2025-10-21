@@ -1,4 +1,4 @@
-class RegisterBank {
+export class RegisterBank {
     constructor(config) {
         this.regs = new Map();
 
