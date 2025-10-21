@@ -102,8 +102,18 @@ td,th {
     user-select: none;
 }
 
-td.changed,th.changed {
-    background-color: rgba(33, 150, 243, 0.12);
+td.changed, th.changed {
+    background-color: rgb(153, 108, 108);
+    animation: highlight 1s ease forwards;
+}
+
+@keyframes highlight {
+    0% {
+        background-color: rgb(153, 108, 108);
+    }
+    100% {
+        background-color: transparent;
+    }
 }
 
 .current-line {

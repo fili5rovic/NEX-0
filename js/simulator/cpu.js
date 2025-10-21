@@ -10,6 +10,8 @@ class CPU extends EventTarget {
         this.acc = 0;
         this.halted = false;
         this.regSize = 1;
+
+        this.executionTime = 1000;
     }
 
     async runCode(code) {

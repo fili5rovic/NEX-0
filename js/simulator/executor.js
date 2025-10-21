@@ -6,9 +6,7 @@ class Executor {
         this.cpu = cpu;
         this.labelMap = null;
         this.nextJump = null;
-        this.delay = 1000;
-
-        this.currLineExecuting = 0;
+        this.currLineExecuting = null;
     }
 
     async run(lines) {
@@ -53,7 +51,7 @@ class Executor {
         }));
 
 
-        await this.sleep(this.delay);
+        await this.sleep(this.cpu.executionTime);
     }
 
     sleep(ms) {
