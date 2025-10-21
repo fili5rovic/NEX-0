@@ -16,6 +16,10 @@ class Architecture {
     getGeneralRegisters() {
         throw new Error('Abstract')
     }
+
+    regsConfig() {
+        throw new Error('Abstract')
+    }
 }
 
 export class OneAddrArchitecture extends Architecture {
@@ -33,6 +37,20 @@ export class OneAddrArchitecture extends Architecture {
 
     getGeneralRegisters() {
         return Array(8).fill(0)
+    }
+
+    regsConfig() {
+        return [
+            { name: 'ACC' },
+            { name: 'R0' },
+            { name: 'R1' },
+            { name: 'R2' },
+            { name: 'R3' },
+            { name: 'R4' },
+            { name: 'R5' },
+            { name: 'R6' },
+            { name: 'R7' },
+        ]
     }
 
     validateInstruction(instruction) {
