@@ -73,7 +73,7 @@ h1 {
     word-spacing: inherit;
 }
 
-.cpu-wrapper {
+.cpu {
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -14,12 +14,9 @@ const cpu = new CPU(new OneAddrArchitecture());
 const editorHandler = new EditorHandler(cpu, editor, highlightedCode, highlightedLayer);
 const display = new CPUDisplay(cpu, editorHandler);
 
-
-
-
 runBtn.addEventListener('click', async ()=>{
     let code = extractCode(editor.value);
     cpu.reset();
     display.reset();
     await cpu.runCode(code);
-})
+});

@@ -13,10 +13,6 @@ class Architecture {
         throw new Error('Abstract method must be implemented');
     }
 
-    getGeneralRegisters() {
-        throw new Error('Abstract')
-    }
-
     regsConfig() {
         throw new Error('Abstract')
     }
@@ -33,10 +29,6 @@ export class OneAddrArchitecture extends Architecture {
 
     getKeywords() {
         return this.keywords;
-    }
-
-    getGeneralRegisters() {
-        return Array(8).fill(0)
     }
 
     regsConfig() {

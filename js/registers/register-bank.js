@@ -26,8 +26,16 @@ export class RegisterBank {
         const reg = this.regs.get(name);
         if (reg == null || reg.broken || reg.readonly)
             return;
-        val = handleOverflow(val, reg.size);
+        val = this.handleOverflow(val, reg.size);
         reg.val = val;
+    }
+
+    reset() {
+        for (let [name, reg] of this.regs) {
+            if (!reg.readonly && !reg.broken) {
+                reg.val = 0;
+            }
+        }
     }
 
     handleOverflow(number, regSize = 1) {

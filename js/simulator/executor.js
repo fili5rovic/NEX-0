@@ -11,7 +11,6 @@ class Executor {
 
     async run(lines) {
         this.labelMap = getLabelsMap(lines);
-        console.log(this.labelMap);
         this.nextJump = null;
 
         for (let i = 0; i < lines.length; i++) {
@@ -32,7 +31,6 @@ class Executor {
     async execute(line, cpu) {
         line = removeLabelsFromLine(line);
         line = line.toLowerCase().trim();
-        console.log(line);
         if (!line) return;
         const parts = line.split(/\s+/);
         const instruction = parts[0];
@@ -45,8 +43,7 @@ class Executor {
         } else if (isJumpInstruction(instruction)) {
             this.jumpInstruction(instruction, operand, cpu);
         } else {
-            const { value, regIndex } = parseOperand(operand, cpu);
-            this.oneOperandExecution(instruction, cpu, value, regIndex);
+            this.oneOperandExecution(instruction, operand, cpu);
         }
 
         cpu.dispatchEvent(new CustomEvent('instruction-executing', {
@@ -64,7 +61,7 @@ class Executor {
     zeroOperandExecution(instruction, cpu) {
         switch (instruction) {
             case 'neg':
-                cpu.setAcc(-cpu.getAcc());
+                cpu.setReg('acc', -cpu.getReg('acc'));
                 break;
             case 'nop':
                 break;
@@ -80,13 +77,12 @@ class Executor {
     jumpInstruction(instruction, operand, cpu) {
         let nextIndex = this.labelMap.get(operand);
         nextIndex--;
-        console.log("next index: " + nextIndex)
         if (isNaN(nextIndex)) {
             console.warn('label does not exist');
             return;
         }
 
-        let acc = cpu.getAcc();
+        let acc = cpu.getReg('acc');
 
         switch (instruction) {
             case 'jmp':
@@ -122,27 +118,27 @@ class Executor {
         }
     }
 
-    oneOperandExecution(instruction, cpu, val, index) {
+    oneOperandExecution(instruction, operand, cpu) {
+        const val = getValFromOperand(operand);
+        const accVal = cpu.getReg('acc');
         switch (instruction) {
             case 'add':
-                cpu.setAcc(cpu.getAcc() + val);
+                cpu.setReg('acc', accVal + val);
                 break;
             case 'sub':
-                cpu.setAcc(cpu.getAcc() - val);
+                cpu.setReg('acc', accVal - val);
                 break;
             case 'mul':
-                cpu.setAcc(cpu.getAcc() * val);
+                cpu.setReg('acc', accVal * val);
                 break;
             case 'div':
-                cpu.setAcc(cpu.getAcc() / val);
+                cpu.setReg('acc', accVal / val);
                 break;
             case 'load':
-                cpu.setAcc(val);
+                cpu.setReg('acc', val);
                 break;
             case 'store':
-                if (index !== null) {
-                    cpu.setReg(index, cpu.getAcc());
-                }
+                cpu.setReg(operand, cpu.getReg('acc'));
                 break;
         }
     }
@@ -154,13 +150,15 @@ function isJumpInstruction(instruction) {
     return /^(jmp|jz|jnz|jg|jge|jl|jle)$/.test(instruction);
 }
 
-function parseOperand(operand, cpu) {
-    const isRegister = operand.startsWith('r');
-
-    if (isRegister) {
-        const regIndex = parseInt(operand.slice(1));
-        return { value: cpu.getReg(regIndex), regIndex };
+function getValFromOperand(operand, cpu) {
+    if (operand.startsWith('#')) {
+        operand = operand.replace('#', '')
+        return parseInt(operand);
     }
 
-    return { value: parseInt(operand), regIndex: null };
+    if (operand.startsWith('r')) {
+        return cpu.getReg(operand);
+    }
+    console.warn('unknown operand');
+    return -1;
 }
