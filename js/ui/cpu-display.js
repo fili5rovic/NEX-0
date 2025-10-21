@@ -27,7 +27,7 @@ export class CPUDisplay {
     // this.cpu.addEventListener('register-changed', (e) => {
     //     this.updateSingleRegister(e.detail.index, e.detail.value);
     // });
-    updateRegisters() {
+    updateRegisters(anim = true) {
         const tds = this.regTable.querySelectorAll('td');
         const ths = this.regTable.querySelectorAll('th');
 
@@ -35,22 +35,23 @@ export class CPUDisplay {
             const td = tds[i];
             const th = ths[i];
             const newVal = (i === 0 ? this.cpu.getAcc() : this.cpu.getReg(i - 1));
-            const oldVal = parseInt(td.innerText);
+            if (anim) {
+                const oldVal = parseInt(td.innerText);
 
-            if (oldVal !== newVal) {
-                td.style.animationDuration = `${this.cpu.executionTime}ms`;
-                th.style.animationDuration = `${this.cpu.executionTime}ms`;
+                if (oldVal !== newVal) {
+                    td.style.animationDuration = `${this.cpu.executionTime}ms`;
+                    th.style.animationDuration = `${this.cpu.executionTime}ms`;
 
-                td.classList.remove('changed');
-                th.classList.remove('changed');
+                    td.classList.remove('changed');
+                    th.classList.remove('changed');
 
-                void td.offsetWidth;
-                void th.offsetWidth;
+                    void td.offsetWidth;
+                    void th.offsetWidth;
 
-                td.classList.add('changed');
-                th.classList.add('changed');
+                    td.classList.add('changed');
+                    th.classList.add('changed');
+                }
             }
-
             td.innerText = newVal;
         }
     }
@@ -63,5 +64,6 @@ export class CPUDisplay {
         ths.forEach(th => th.classList.remove('changed'));
 
         this.editorHandler.clearCurrentLine();
+        this.updateRegisters(false);
     }
 }
