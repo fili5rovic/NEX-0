@@ -1,19 +1,28 @@
 import { Architecture } from "../architecture/architecture.js";
+import CPU from "../simulator/cpu.js";
 
 export class CPUGenerator {
     constructor() {
         this.cpuHtmlArr = [];
+        this.cpuMap = new Map();
     }
 
     generate() {
         let cpus = document.getElementsByClassName('cpu');
         for (const cpuElem of cpus) {
             const html = this.#makeInnerHtmlString(cpuElem);
-            console.log(html);
             this.cpuHtmlArr.push(html);
         }
-    }
 
+        for (let i = 0; i < cpus.length; i++) {
+            const cpuElem = cpus[i];
+            cpuElem.innerHTML = this.cpuHtmlArr[i];
+            const cpu = new CPU(cpuElem);
+            this.cpuMap.set(i, cpu);
+
+            cpu.initRunButtonListener();
+        }
+    }
 
     #makeInnerHtmlString(cpuElem) {
         const regTableHtml = this.#makeRegTableHtmlString(cpuElem);
@@ -26,28 +35,21 @@ export class CPUGenerator {
     #makeRegTableHtmlString(cpuElem) {
         const arch = Architecture.fromString(cpuElem.getAttribute('data-arch'));
 
+        const ths = arch.regsConfig()
+            .map(entry => `<th>${entry.name}</th>`)
+            .join('\n\t\t\t\t');
+
+        const n = arch.regsConfig().length;
+
+        const tds = Array(n).fill('<td>0</td>')
+            .join('\n\t\t\t\t');
+
         return `<table data-role="regs-table">
             <tr>
-                <th>ACC</th>
-                <th>R0</th>
-                <th>R1</th>
-                <th>R2</th>
-                <th>R3</th>
-                <th>R4</th>
-                <th>R5</th>
-                <th>R6</th>
-                <th>R7</th>
+                ${ths}
             </tr>
             <tr>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                ${tds}
             </tr>
         </table>`;
     }
