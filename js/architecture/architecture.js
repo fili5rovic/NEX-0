@@ -1,7 +1,16 @@
-class Architecture {
+export class Architecture {
     constructor() {
         if (this.constructor === Architecture) {
             throw new Error('Abstract class cannot be instantiated');
+        }
+    }
+
+    static fromString(name) {
+        switch (name) {
+            case 'one-addr':
+                return new OneAddrArchitecture();
+            default:
+                return new OneAddrArchitecture();
         }
     }
 

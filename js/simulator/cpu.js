@@ -2,13 +2,13 @@ import { RegisterBank } from "../registers/register-bank.js";
 import Executor from "./executor.js";
 
 import {CPUDisplay} from "../ui/cpu-display.js"
-import { OneAddrArchitecture } from "../architecture/architecture.js";
+import { Architecture } from "../architecture/architecture.js";
 
 class CPU extends EventTarget {
     constructor(cpuElem) {
         super();
         this.cpuElem = cpuElem;
-        this.architecture = new OneAddrArchitecture();
+        this.architecture = Architecture.fromString(cpuElem.getAttribute('data-arch'));
 
         this.editor = cpuElem.querySelector('[data-role="editor"]');
         this.runBtn = cpuElem.querySelector('[data-role="runBtn"]');
