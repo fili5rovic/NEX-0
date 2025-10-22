@@ -1,5 +1,6 @@
 @import url('syntax.css');
 @import url('cpu.css');
+@import url('mem.css');
 
 * {
     margin: 0;
