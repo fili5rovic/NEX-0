@@ -12,8 +12,8 @@
 
 <body>
     <h1>NEX-0</h1>
-    <div class="cpu" id="gay-cpu">
-        <table id="regs-table">
+    <div class="cpu" id="cpu1">
+        <table data-role="regs-table">
             <tr>
                 <th>ACC</th>
                 <th>R0</th>
@@ -37,15 +37,14 @@
                 <td>0</td>
             </tr>
         </table>
-        <div data-role="editor-container" id="editor-container">
+        <div data-role="editor-container">
             <textarea data-role="editor" spellcheck="false"></textarea>
             <pre data-role="highlight-layer" aria-hidden="true"><code data-role="highlighted-code"></code></pre>
         </div>
         <div class="controls">
-            <input class="button" data-role="runBtn" id="runBtn" type="button" value="RUN">
+            <input class="button" data-role="runBtn" type="button" value="RUN">
         </div>
     </div>
-
 
 </body>
 

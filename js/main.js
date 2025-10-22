@@ -1,8 +1,6 @@
 import CPU from './simulator/cpu.js';
 
-import { OneAddrArchitecture } from './architecture/architecture.js';
+const cpuElem1 = document.getElementById('cpu1');
+const cpu1 = new CPU(cpuElem1);
 
-const cpuElem = document.getElementById('gay-cpu');
-const cpu = new CPU(new OneAddrArchitecture(), cpuElem);
-
-cpu.initRunButtonListener();
+cpu1.initRunButtonListener();

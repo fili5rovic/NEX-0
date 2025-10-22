@@ -4,7 +4,7 @@ export class CPUDisplay {
     constructor(cpu) {
         this.cpu = cpu;
         this.editorHandler = new EditorHandler(cpu.getCpuElem());
-        this.regTable = document.getElementById('regs-table');
+        this.regTable = cpu.getCpuElem().querySelector('[data-role="regs-table"]');
 
         this.subscribeToEvents();
     }
