@@ -1,9 +1,9 @@
 export class EditorHandler {
-    constructor(cpu, editor, highlightedCode, highlightLayer) {
-        this.cpu = cpu;
-        this.editor = editor;
-        this.highlightedCode = highlightedCode;
-        this.highlightLayer = highlightLayer
+    constructor(cpuElem) {
+        this.cpuElem = cpuElem;
+        this.editor = cpuElem.querySelector('[data-role="editor"]');
+        this.highlightedCode = cpuElem.querySelector('[data-role="highlighted-code"]');
+        this.highlightLayer = cpuElem.querySelector('[data-role="highlight-layer"]');
 
         this.currentLineIndex = null;
 

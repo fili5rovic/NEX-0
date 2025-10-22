@@ -1,7 +1,9 @@
+import { EditorHandler} from "../editor/editor.js"
+
 export class CPUDisplay {
-    constructor(cpu, editorHandler) {
+    constructor(cpu) {
         this.cpu = cpu;
-        this.editorHandler = editorHandler;
+        this.editorHandler = new EditorHandler(cpu.getCpuElem());
         this.regTable = document.getElementById('regs-table');
 
         this.subscribeToEvents();
