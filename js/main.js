@@ -1,4 +1,4 @@
-import { CPUGenerator } from './ui/cpu-generator.js';
+import { CPUGenerator } from "./cpu/ui/cpu-generator.js";
 
 const cpuGenerator = new CPUGenerator();
 cpuGenerator.generate();
