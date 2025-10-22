@@ -1,4 +1,4 @@
-import { getLabelsMap, removeLabelsFromLine } from "./parser.js";
+import { getLabelsMap, removeLabelsFromLine, removeComments } from "./parser.js";
 
 class Executor {
 
@@ -30,6 +30,7 @@ class Executor {
 
     async execute(line, cpu) {
         line = removeLabelsFromLine(line);
+        line = removeComments(line);
         line = line.toLowerCase().trim();
         if (!line) return;
         const parts = line.split(/\s+/);
@@ -83,38 +84,23 @@ class Executor {
         }
 
         let acc = cpu.getReg('acc');
+        let shouldJump = false;
 
         switch (instruction) {
-            case 'jmp':
-                this.nextJump = nextIndex;
-                break;
-            case 'jz':
-                if (acc == 0)
-                    this.nextJump = nextIndex;
-                break;
-            case 'jnz':
-                if (acc != 0)
-                    this.nextJump = nextIndex;
-                break;
-            case 'jg':
-                if (acc > 0)
-                    this.nextJump = nextIndex;
-                break;
-            case 'jge':
-                if (acc >= 0)
-                    this.nextJump = nextIndex;
-                break;
-            case 'jl':
-                if (acc < 0)
-                    this.nextJump = nextIndex;
-                break;
-            case 'jle':
-                if (acc <= 0)
-                    this.nextJump = nextIndex;
-                break;
+            case 'jmp': shouldJump = true; break;
+            case 'jz': shouldJump = (acc == 0); break;
+            case 'jnz': shouldJump = (acc != 0); break;
+            case 'jg': shouldJump = (acc > 0); break;
+            case 'jge': shouldJump = (acc >= 0); break;
+            case 'jl': shouldJump = (acc < 0); break;
+            case 'jle': shouldJump = (acc <= 0); break;
             default:
-                console.warn('unknown jump instruction')
-                break;
+                console.warn('unknown jump instruction');
+                return;
+        }
+
+        if (shouldJump) {
+            this.nextJump = nextIndex;
         }
     }
 

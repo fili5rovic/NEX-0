@@ -22,7 +22,7 @@ export function removeLabelsFromLine(line) {
     return line.replace(/^\w+:/,'');
 }
 
-function removeComments(code) {
+export function removeComments(code) {
     return code.replace(/;.*$/gm, '');
 }
 

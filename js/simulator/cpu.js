@@ -1,7 +1,7 @@
 import { RegisterBank } from "../registers/register-bank.js";
 import Executor from "./executor.js";
 
-import {CPUDisplay} from "../ui/cpu-display.js"
+import { CPUDisplay } from "../ui/cpu-display.js"
 import { Architecture } from "../architecture/architecture.js";
 
 class CPU extends EventTarget {
@@ -19,14 +19,33 @@ class CPU extends EventTarget {
 
         this.halted = false;
         this.executionTime = 1000;
+        this.running = false;
     }
 
     initRunButtonListener() {
-        this.runBtn.addEventListener('click', ()=> {
+        this.runBtn.addEventListener('click', () => {
+            if (this.running) return; // Već radi, ignoriši
+
+            this.startExecution();
+        });
+    }
+
+    async startExecution() {
+        this.running = true;
+        this.runBtn.disabled = true;
+        this.runBtn.textContent = 'Running...';
+
+        try {
             this.reset();
             this.display.reset();
-            this.runCode(this.editor.value);
-        })
+            await this.runCode(this.editor.value);
+        } catch (error) {
+            console.error('Execution error:', error);
+        } finally {
+            this.running = false;
+            this.runBtn.disabled = false;
+            this.runBtn.textContent = 'RUN';
+        }
     }
 
     async runCode(code) {

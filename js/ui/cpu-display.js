@@ -1,4 +1,4 @@
-import { EditorHandler} from "../editor/editor.js"
+import { EditorHandler} from "../editor/editor-handler.js"
 
 export class CPUDisplay {
     constructor(cpu) {
