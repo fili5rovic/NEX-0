@@ -16,7 +16,7 @@ h1 {
     color: white;
 }
 
-#editor-container {
+[data-role="editor-container"] {
     position: relative;
     width: 100%;
     max-width: 320px;
@@ -28,8 +28,8 @@ h1 {
     background: #2d2d2d;
 }
 
-#editor,
-#highlight-layer {
+[data-role="editor"],
+[data-role="highlight-layer"] {
     position: absolute;
     top: 0;
     left: 0;
@@ -50,7 +50,7 @@ h1 {
     outline: none;
 }
 
-#editor {
+[data-role="editor"] {
     color: transparent;
     background: transparent;
     caret-color: white;
@@ -59,13 +59,13 @@ h1 {
     -webkit-text-fill-color: transparent;
 }
 
-#highlight-layer {
+[data-role="highlight-layer"] {
     color: #d4d4d4;
     z-index: 1;
     pointer-events: none;
 }
 
-#highlight-layer code {
+[data-role="highlight-layer"] code {
     font-family: inherit;
     font-size: inherit;
     line-height: inherit;

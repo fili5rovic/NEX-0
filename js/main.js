@@ -5,10 +5,11 @@ import { OneAddrArchitecture } from './architecture/architecture.js';
 import { EditorHandler } from './editor/editor.js';
 import { CPUDisplay } from './ui/cpu-display.js';
 
-const editor = document.getElementById('editor');
+const cpuElem = document.getElementById('gay-cpu');
+const editor = cpuElem.querySelector('[data-role="editor"]');
 const runBtn = document.querySelector('#runBtn');
-const highlightedCode = document.getElementById('highlighted-code');
-const highlightedLayer = document.getElementById('highlight-layer');
+const highlightedCode = document.querySelector('[data-role="highlighted-code"]');
+const highlightedLayer = document.querySelector('[data-role="highlight-layer"]');
 
 const cpu = new CPU(new OneAddrArchitecture());
 const editorHandler = new EditorHandler(cpu, editor, highlightedCode, highlightedLayer);

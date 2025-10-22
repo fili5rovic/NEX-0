@@ -119,7 +119,7 @@ class Executor {
     }
 
     oneOperandExecution(instruction, operand, cpu) {
-        const val = getValFromOperand(operand);
+        const val = getValFromOperand(operand, cpu);
         const accVal = cpu.getReg('acc');
         switch (instruction) {
             case 'add':

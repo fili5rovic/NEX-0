@@ -12,7 +12,7 @@
 
 <body>
     <h1>NEX-0</h1>
-    <div class="cpu">
+    <div class="cpu" id="gay-cpu">
         <table id="regs-table">
             <tr>
                 <th>ACC</th>
@@ -37,9 +37,9 @@
                 <td>0</td>
             </tr>
         </table>
-        <div id="editor-container">
-            <textarea id="editor" spellcheck="false"></textarea>
-            <pre id="highlight-layer" aria-hidden="true"><code id="highlighted-code"></code></pre>
+        <div data-role="editor-container" id="editor-container">
+            <textarea data-role="editor" spellcheck="false"></textarea>
+            <pre data-role="highlight-layer" aria-hidden="true"><code data-role="highlighted-code"></code></pre>
         </div>
         <div class="controls">
             <input class="button" id="runBtn" type="button" value="RUN">
