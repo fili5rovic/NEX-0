@@ -1,7 +1,7 @@
 export function extractCode(text) {
-    let code = removeComments(text);
-    code = normalizeWhitespace(code);
-    code = trimSpacesTabs(code);
+    let code = text.replace(/;.*$/gm, '');
+    code = code.replace(/[ \t]+/g, ' ');
+    code = code.replace(/^[ \t]+|[ \t]+$/g, '');
     return code;
 }
 
@@ -21,16 +21,3 @@ export function getLabelsMap(lines) {
 export function removeLabelsFromLine(line) {
     return line.replace(/^\w+:/,'');
 }
-
-export function removeComments(code) {
-    return code.replace(/;.*$/gm, '');
-}
-
-function normalizeWhitespace(code) {
-    return code.replace(/[ \t]+/g, ' ');
-}
-
-function trimSpacesTabs(code) {
-    return code.replace(/^[ \t]+|[ \t]+$/g, '');
-}
-

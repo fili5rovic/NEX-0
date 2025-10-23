@@ -73,6 +73,7 @@ export class CPUGenerator {
     #makeControlHtmlString() {
         return `<div class="controls">
             <input data-role="runBtn" type="button" value="RUN">
+            <input data-role="stopBtn" type="button" value="STOP">
         </div>`;
     }
 

@@ -1,4 +1,4 @@
-import {getLabelsMap, removeLabelsFromLine, removeComments} from "./parser.js";
+import {getLabelsMap, removeLabelsFromLine} from "./parser.js";
 import {System} from "../../system.js";
 
 class Executor {
@@ -31,7 +31,6 @@ class Executor {
 
     async execute(line, cpu) {
         line = removeLabelsFromLine(line);
-        line = removeComments(line);
         line = line.toLowerCase().trim();
         if (!line) return;
         const parts = line.split(/\s+/);

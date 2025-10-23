@@ -3,6 +3,7 @@ import Executor from "./executor.js";
 
 import { CPUDisplay } from "../ui/cpu-display.js"
 import { Architecture } from "../architecture/architecture.js";
+import {extractCode} from "./parser.js";
 
 class CPU extends EventTarget {
     constructor(cpuElem) {
@@ -12,6 +13,7 @@ class CPU extends EventTarget {
 
         this.editor = cpuElem.querySelector('[data-role="editor"]');
         this.runBtn = cpuElem.querySelector('[data-role="runBtn"]');
+        this.stopBtn = cpuElem.querySelector('[data-role="stopBtn"]');
 
         this.display = new CPUDisplay(this);
         this.executor = new Executor(this);
@@ -24,14 +26,20 @@ class CPU extends EventTarget {
 
     initRunButtonListener() {
         this.runBtn.addEventListener('click', () => {
-            if (this.running) return; // Već radi, ignoriši
+            if (this.running) return;
 
-            this.startExecution();
+            this.runningPromise = this.startExecution();
         });
+        this.stopBtn.addEventListener('click', ()=>{
+            if(!this.running)
+                return;
+            this.halted = true;
+        })
     }
 
     async startExecution() {
         this.running = true;
+        this.halted = false;
         this.runBtn.disabled = true;
         this.runBtn.textContent = 'Running...';
 
@@ -48,6 +56,7 @@ class CPU extends EventTarget {
     }
 
     async runCode(code) {
+        code = extractCode(code);
         let lines = code.split('\n');
         await this.executor.run(lines);
     }
