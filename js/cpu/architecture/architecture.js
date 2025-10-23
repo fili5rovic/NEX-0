@@ -27,7 +27,9 @@ export class OneAddrArchitecture extends Architecture {
     constructor() {
         super();
         this.keywords = [
-            'add', 'sub', 'mul', 'div', 'load', 'store', 'neg', 'nop', 'halt',
+            'add', 'sub', 'mul', 'div',
+            'load', 'store',
+            'neg','inc','dec', 'nop', 'halt',
             'jmp', 'jz', 'jnz', 'jg', 'jge', 'jl', 'jle'
         ];
     }

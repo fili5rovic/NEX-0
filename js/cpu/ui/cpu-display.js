@@ -3,7 +3,7 @@ import { EditorHandler} from "../editor/editor-handler.js"
 export class CPUDisplay {
     constructor(cpu) {
         this.cpu = cpu;
-        this.editorHandler = new EditorHandler(cpu.getCpuElem());
+        this.editorHandler = new EditorHandler(cpu);
         this.regTable = cpu.getCpuElem().querySelector('[data-role="regs-table"]');
 
         this.subscribeToEvents();

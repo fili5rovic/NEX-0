@@ -65,6 +65,12 @@ class Executor {
             case 'neg':
                 cpu.setReg('acc', -cpu.getReg('acc'));
                 break;
+            case 'inc':
+                cpu.setReg('acc', cpu.getReg('acc') + 1);
+                break;
+            case 'dec':
+                cpu.setReg('acc', cpu.getReg('acc') - 1);
+                break;
             case 'nop':
                 break;
             case 'halt':
@@ -108,6 +114,7 @@ class Executor {
     oneOperandExecution(instruction, operand, cpu) {
         const val = getValFromOperand(operand, cpu);
         const accVal = cpu.getReg('acc');
+        const operandType = getOperandType(operand);
         switch (instruction) {
             case 'add':
                 cpu.setReg('acc', accVal + val);
@@ -122,15 +129,17 @@ class Executor {
                 cpu.setReg('acc', accVal / val);
                 break;
             case 'load':
-                if(getOperandType(operand).startsWith('mem')) {
+                if(operandType.startsWith('mem')) {
                     const memVal = System.getInstance().sharedMemory.get(val);
+                    console.log(memVal);
                     cpu.setReg('acc', memVal);
                 } else {
+
                     cpu.setReg('acc', val);
                 }
                 break;
             case 'store':
-                if(getOperandType(operand).startsWith('mem')) {
+                if(operandType.startsWith('mem') || operandType === 'regind') {
                     System.getInstance().sharedMemory.set(val, cpu.getReg('acc'));
                 } else {
                     cpu.setReg(operand, cpu.getReg('acc'));

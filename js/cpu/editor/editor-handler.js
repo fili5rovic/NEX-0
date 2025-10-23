@@ -1,6 +1,8 @@
 export class EditorHandler {
-    constructor(cpuElem) {
-        this.cpuElem = cpuElem;
+    constructor(cpu) {
+        const cpuElem = cpu.getCpuElem();
+
+        this.keywords = cpu.architecture.getKeywords();
         this.editor = cpuElem.querySelector('[data-role="editor"]');
         this.highlightedCode = cpuElem.querySelector('[data-role="highlighted-code"]');
         this.highlightLayer = cpuElem.querySelector('[data-role="highlight-layer"]');
@@ -21,7 +23,6 @@ export class EditorHandler {
             const start = this.editor.selectionStart;
             const end = this.editor.selectionEnd;
             const value = this.editor.value;
-
             this.editor.value = value.substring(0, start) + '\t' + value.substring(end);
 
             this.editor.selectionStart = this.editor.selectionEnd = start + 1;
@@ -63,8 +64,10 @@ export class EditorHandler {
             return text.replace(/(;.*$)/, '<span class="comment">$1</span>');
         }
 
+        const keywordReg = new RegExp(`\\b(${this.keywords.join('|')})\\b`, 'gi');
+
         text = text.replace(/(;.*$)/gm, '<span class="comment">$1</span>');
-        text = text.replace(/\b(add|sub|mul|div|load|store|neg|nop|halt|jmp|jz|jnz|jg|jge|jl|jle)\b/gi, '<span class="keyword">$1</span>');
+        text = text.replace(keywordReg, '<span class="keyword">$1</span>');
         text = text.replace(/\b([Rr][0-9]+)\b/g, '<span class="register">$1</span>');
         text = text.replace(/(#?\b\d+\b|0x[0-9A-Fa-f]+)/g, '<span class="number">$1</span>');
 

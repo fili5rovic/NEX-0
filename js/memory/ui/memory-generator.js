@@ -20,7 +20,7 @@ export class MemoryGenerator {
         const rows = memSize.split('x').at(0);
         const cols = memSize.split('x').at(1);
 
-        let html = `<div class="mem-header">MEM ${rows * cols}B</div><table class="mem-table">`;
+        let html = `<div class="mem-header">MEMORY ${rows * cols}B</div><table class="mem-table">`;
 
         for (let i = 0; i < rows; i++) {
             html += '\n\t<tr>';
