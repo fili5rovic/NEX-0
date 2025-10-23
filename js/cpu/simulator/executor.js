@@ -89,8 +89,8 @@ class Executor {
 
         switch (instruction) {
             case 'jmp': shouldJump = true; break;
-            case 'jz': shouldJump = (acc == 0); break;
-            case 'jnz': shouldJump = (acc != 0); break;
+            case 'jz': shouldJump = (acc === 0); break;
+            case 'jnz': shouldJump = (acc !== 0); break;
             case 'jg': shouldJump = (acc > 0); break;
             case 'jge': shouldJump = (acc >= 0); break;
             case 'jl': shouldJump = (acc < 0); break;

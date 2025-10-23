@@ -1,35 +1,60 @@
 export class Memory {
     constructor(memElem) {
         this.memElem = memElem;
-        const memSize = memElem.getAttribute('data-mem-size');
-        this.rows = memSize.split('x').at(0);
-        this.cols = memSize.split('x').at(1);
-        this.size = this.rows * this.cols;
-        this.values = Array(this.size).fill(1);
 
-        this.values[5] = 9;
-        this.values[1] = 5;
+        const memSize = memElem.getAttribute('data-mem-size') || '16x16';
+        const [rows, cols] = memSize.split('x').map(Number);
+        if (isNaN(rows) || isNaN(cols)) {
+            throw new Error(`Invalid memory size: ${memSize}`);
+        }
+        this.size = rows * cols;
+        this.values = new Uint8Array(this.size);
+        this.previousValues = new Uint8Array(this.size);
 
-        this.updateDisplay();
+        this.boxes = Array.from(memElem.querySelectorAll('td'));
+
+        if (this.boxes.length !== this.size) {
+            throw new Error(`Table size mismatch: expected ${this.size}, got ${this.boxes.length}`);
+        }
+
+        this.updateDisplayAll(false);
     }
 
-    updateDisplay() {
-        const boxes = this.memElem.querySelectorAll('td');
-        for (let i = 0; i < boxes.length; i++) {
-            const box = boxes[i];
-            box.innerHTML = this.values[i];
+    updateDisplayAll(anim = true) {
+        for (let i = 0; i < this.size; i++) {
+            this.updateDisplaySingle(i, anim);
         }
     }
 
+    updateDisplaySingle(index, anim = true) {
+        const box = this.boxes[index];
+        const currentVal = this.values[index];
+        const oldVal = this.previousValues[index];
+
+        if (anim && oldVal !== currentVal) {
+            box.classList.remove('changed');
+            void box.offsetWidth;
+            box.classList.add('changed');
+        }
+
+        box.textContent = currentVal;
+        box.classList.toggle('non-zero', currentVal !== 0);
+
+        this.previousValues[index] = currentVal;
+    }
+
     set(index, val) {
+        if (index < 0 || index >= this.size) {
+            throw new RangeError(`Memory write out of bounds: ${index} (size: ${this.size})`);
+        }
         this.values[index] = val;
-        this.updateDisplay();
+        this.updateDisplaySingle(index);
     }
 
     get(index) {
-        if(index < 0 || index > this.size)
-            return -1;
+        if (index < 0 || index >= this.size) {
+            throw new RangeError(`Memory read out of bounds: ${index} (size: ${this.size})`);
+        }
         return this.values[index];
     }
-
 }

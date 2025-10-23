@@ -1,19 +1,59 @@
 .mem {
     margin: auto;
     padding: 10px;
-    background-color: #323232;
-    border-radius: 8%;
+    background-color: #2a2a2a;
+    border: 2px solid rgb(34, 34, 34);
+    border-radius: 5%;
     width: fit-content;
 }
 
 .mem-header {
     text-align: center;
-    color: #8a8a8a;
+    color: gray;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 6px;
+    background-color: #222222;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    user-select: none;
 }
 
 .mem-table {
+    border: 1px solid #444;
+    table-layout: fixed;
+    border-collapse: collapse;
+    background: linear-gradient(180deg, #222222 0%, #252525 100%);
+    border-radius: 4px;
+    overflow: hidden;
 }
 
 .mem-cell {
-    padding: 10px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+    color: gray;
+    text-align: center;
+    user-select: none;
+    border-bottom: 1px solid #333;
+    background-color: #222222;
+}
+
+.mem-cell.changed {
+    background-color: rgba(33, 150, 243, 0.12);
+    animation: memHighlight 1s ease forwards;
+}
+
+.mem-cell.non-zero {
+    color:white;
+}
+
+@keyframes memHighlight {
+    0% {
+        background-color: rgba(33, 150, 243, 0.12);
+    }
+    100% {
+        background-color: #222222;
+    }
 }
