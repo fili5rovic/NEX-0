@@ -10,11 +10,18 @@ export class CPUGenerator {
     generate() {
         let cpus = document.getElementsByClassName('cpu');
         for (const cpuElem of cpus) {
-            const html = this.#makeInnerHtmlString(cpuElem);
-            this.cpuHtmlArr.push(html);
+            if (cpuElem.innerHTML !== '') {
+                console.log('Not generating anything for a cpu. It already has innerHTML.');
+                this.cpuHtmlArr.push(null);
+            } else {
+                const html = this.#makeInnerHtmlString(cpuElem);
+                this.cpuHtmlArr.push(html);
+            }
         }
 
         for (let i = 0; i < cpus.length; i++) {
+            if(this.cpuHtmlArr.at(i) === null)
+                continue;
             const cpuElem = cpus[i];
             cpuElem.innerHTML = this.cpuHtmlArr[i];
             const cpu = new CPU(cpuElem);

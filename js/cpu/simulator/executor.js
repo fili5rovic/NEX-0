@@ -1,4 +1,4 @@
-import { getLabelsMap, removeLabelsFromLine, removeComments } from "./parser.js";
+import {getLabelsMap, removeLabelsFromLine, removeComments} from "./parser.js";
 import {System} from "../../system.js";
 
 class Executor {
@@ -49,7 +49,7 @@ class Executor {
         }
 
         cpu.dispatchEvent(new CustomEvent('instruction-executing', {
-            detail: { line, lineNumber, instruction, operand }
+            detail: {line, lineNumber, instruction, operand}
         }));
 
 
@@ -94,13 +94,27 @@ class Executor {
         let shouldJump = false;
 
         switch (instruction) {
-            case 'jmp': shouldJump = true; break;
-            case 'jz': shouldJump = (acc === 0); break;
-            case 'jnz': shouldJump = (acc !== 0); break;
-            case 'jg': shouldJump = (acc > 0); break;
-            case 'jge': shouldJump = (acc >= 0); break;
-            case 'jl': shouldJump = (acc < 0); break;
-            case 'jle': shouldJump = (acc <= 0); break;
+            case 'jmp':
+                shouldJump = true;
+                break;
+            case 'jz':
+                shouldJump = (acc === 0);
+                break;
+            case 'jnz':
+                shouldJump = (acc !== 0);
+                break;
+            case 'jg':
+                shouldJump = (acc > 0);
+                break;
+            case 'jge':
+                shouldJump = (acc >= 0);
+                break;
+            case 'jl':
+                shouldJump = (acc < 0);
+                break;
+            case 'jle':
+                shouldJump = (acc <= 0);
+                break;
             default:
                 console.warn('unknown jump instruction');
                 return;
@@ -112,37 +126,43 @@ class Executor {
     }
 
     oneOperandExecution(instruction, operand, cpu) {
-        const val = getValFromOperand(operand, cpu);
         const accVal = cpu.getReg('acc');
         const operandType = getOperandType(operand);
+
         switch (instruction) {
             case 'add':
-                cpu.setReg('acc', accVal + val);
+                cpu.setReg('acc', accVal + getValFromOperand(operand, cpu));
                 break;
             case 'sub':
-                cpu.setReg('acc', accVal - val);
+                cpu.setReg('acc', accVal - getValFromOperand(operand, cpu));
                 break;
             case 'mul':
-                cpu.setReg('acc', accVal * val);
+                cpu.setReg('acc', accVal * getValFromOperand(operand, cpu));
                 break;
             case 'div':
-                cpu.setReg('acc', accVal / val);
+                cpu.setReg('acc', accVal / getValFromOperand(operand, cpu));
+                break;
+            case 'mod':
+                cpu.setReg('acc', accVal % getValFromOperand(operand, cpu));
                 break;
             case 'load':
-                if(operandType.startsWith('mem')) {
-                    const memVal = System.getInstance().sharedMemory.get(val);
-                    console.log(memVal);
-                    cpu.setReg('acc', memVal);
+                if(operandType === 'memdir' || operandType === 'memind' || operandType === 'regind') {
+                    const addr = getAddressFromOperand(operand, cpu);
+                    cpu.setReg('acc', System.getInstance().sharedMemory.get(addr));
                 } else {
-
-                    cpu.setReg('acc', val);
+                    cpu.setReg('acc', getValFromOperand(operand, cpu));
                 }
                 break;
             case 'store':
-                if(operandType.startsWith('mem') || operandType === 'regind') {
-                    System.getInstance().sharedMemory.set(val, cpu.getReg('acc'));
+                if(operandType === 'immed') {
+                    console.warn('Cannot use store with immediate values. Nothing happens for now.');
+                    break;
+                }
+                if (operandType === 'regdir') {
+                    cpu.setReg(operand, accVal);
                 } else {
-                    cpu.setReg(operand, cpu.getReg('acc'));
+                    const addr = getAddressFromOperand(operand, cpu);
+                    System.getInstance().sharedMemory.set(addr, accVal);
                 }
                 break;
         }
@@ -154,17 +174,38 @@ export default Executor;
 function isJumpInstruction(instruction) {
     return /^(jmp|jz|jnz|jg|jge|jl|jle)$/.test(instruction);
 }
+
 function getOperandType(operand) {
-    if(operand.startsWith('#')) {
+    if (operand.startsWith('#')) {
         return 'immed';
-    } else if(operand.startsWith('(r') && operand.endsWith(')')) {
+    } else if (operand.startsWith('(r') && operand.endsWith(')')) {
         return 'regind';
-    } else if(operand.startsWith('r')) {
+    } else if (operand.startsWith('r')) {
         return 'regdir';
-    } else if(operand.startsWith('(') && operand.endsWith(')')) {
+    } else if (operand.startsWith('(') && operand.endsWith(')')) {
         return 'memind';
     } else {
         return 'memdir';
+    }
+}
+
+function getAddressFromOperand(operand, cpu) {
+    const type = getOperandType(operand);
+
+    switch (type) {
+        case 'regind':
+            const regName = operand.slice(1, -1);
+            return cpu.getReg(regName);
+
+        case 'memind':
+            const addr = parseInt(operand.slice(1, -1));
+            return System.getInstance().sharedMemory.get(addr);
+
+        case 'memdir':
+            return parseInt(operand);
+
+        default:
+            throw new Error(`Cannot get address from operand type: ${type}`);
     }
 }
 
@@ -178,7 +219,7 @@ function getOperandType(operand) {
 function getValFromOperand(operand, cpu) {
     const type = getOperandType(operand);
 
-    switch(type) {
+    switch (type) {
         case 'immed':
             return parseInt(operand.replace('#', ''));
 

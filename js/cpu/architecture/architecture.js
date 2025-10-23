@@ -26,29 +26,28 @@ export class Architecture {
 export class OneAddrArchitecture extends Architecture {
     constructor() {
         super();
-        this.keywords = [
-            'add', 'sub', 'mul', 'div',
+    }
+
+    getKeywords() {
+        return [
+            'add', 'sub', 'mul', 'div', 'mod',
             'load', 'store',
-            'neg','inc','dec', 'nop', 'halt',
+            'neg', 'inc', 'dec', 'nop', 'halt',
             'jmp', 'jz', 'jnz', 'jg', 'jge', 'jl', 'jle'
         ];
     }
 
-    getKeywords() {
-        return this.keywords;
-    }
-
     regsConfig() {
         return [
-            { name: 'ACC' },
-            { name: 'R0' },
-            { name: 'R1' },
-            { name: 'R2' },
-            { name: 'R3' },
-            { name: 'R4' },
-            { name: 'R5' },
-            { name: 'R6' },
-            { name: 'R7' },
+            {name: 'ACC'},
+            {name: 'R0'},
+            {name: 'R1'},
+            {name: 'R2'},
+            {name: 'R3'},
+            {name: 'R4'},
+            {name: 'R5'},
+            {name: 'R6'},
+            {name: 'R7'},
         ]
     }
 }
