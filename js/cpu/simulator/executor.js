@@ -1,4 +1,5 @@
 import { getLabelsMap, removeLabelsFromLine, removeComments } from "./parser.js";
+import {System} from "../../system.js";
 
 class Executor {
 
@@ -121,10 +122,19 @@ class Executor {
                 cpu.setReg('acc', accVal / val);
                 break;
             case 'load':
-                cpu.setReg('acc', val);
+                if(getOperandType(operand).startsWith('mem')) {
+                    const memVal = System.getInstance().sharedMemory.get(val);
+                    cpu.setReg('acc', memVal);
+                } else {
+                    cpu.setReg('acc', val);
+                }
                 break;
             case 'store':
-                cpu.setReg(operand, cpu.getReg('acc'));
+                if(getOperandType(operand).startsWith('mem')) {
+                    System.getInstance().sharedMemory.set(val, cpu.getReg('acc'));
+                } else {
+                    cpu.setReg(operand, cpu.getReg('acc'));
+                }
                 break;
         }
     }
@@ -135,16 +145,50 @@ export default Executor;
 function isJumpInstruction(instruction) {
     return /^(jmp|jz|jnz|jg|jge|jl|jle)$/.test(instruction);
 }
+function getOperandType(operand) {
+    if(operand.startsWith('#')) {
+        return 'immed';
+    } else if(operand.startsWith('(r') && operand.endsWith(')')) {
+        return 'regind';
+    } else if(operand.startsWith('r')) {
+        return 'regdir';
+    } else if(operand.startsWith('(') && operand.endsWith(')')) {
+        return 'memind';
+    } else {
+        return 'memdir';
+    }
+}
 
+/*
+    immediate -> same number (#5 -> 5)
+    regdir -> read reg (r0 -> value in r0)
+    regind -> read mem at address in reg ((r0) -> mem[r0])
+    memind -> read mem from number ((0x10) -> mem[0x10])
+    memdir -> same number (0x10 -> 0x10)
+ */
 function getValFromOperand(operand, cpu) {
-    if (operand.startsWith('#')) {
-        operand = operand.replace('#', '')
-        return parseInt(operand);
-    }
+    const type = getOperandType(operand);
 
-    if (operand.startsWith('r')) {
-        return cpu.getReg(operand);
+    switch(type) {
+        case 'immed':
+            return parseInt(operand.replace('#', ''));
+
+        case 'regdir':
+            return cpu.getReg(operand);
+
+        case 'regind':
+            const regName = operand.slice(1, -1);
+            const address = cpu.getReg(regName);
+            return System.getInstance().sharedMemory.get(address);
+
+        case 'memind':
+            const addr = operand.slice(1, -1);
+            return System.getInstance().sharedMemory.get(parseInt(addr));
+
+        case 'memdir':
+            return parseInt(operand);
+
+        default:
+            throw new Error(`Unknown operand type: ${operand}`);
     }
-    console.warn('unknown operand');
-    return -1;
 }

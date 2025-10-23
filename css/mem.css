@@ -1,4 +1,19 @@
 .mem {
-    margin: 20px auto;
+    margin: auto;
+    padding: 10px;
+    background-color: #323232;
+    border-radius: 8%;
     width: fit-content;
+}
+
+.mem-header {
+    text-align: center;
+    color: #8a8a8a;
+}
+
+.mem-table {
+}
+
+.mem-cell {
+    padding: 10px;
 }

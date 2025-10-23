@@ -37,7 +37,6 @@ class CPU extends EventTarget {
 
         try {
             this.reset();
-            this.display.reset();
             await this.runCode(this.editor.value);
         } catch (error) {
             console.error('Execution error:', error);
@@ -55,6 +54,7 @@ class CPU extends EventTarget {
 
     reset() {
         this.registerBank.reset();
+        this.display.reset();
     }
 
     getReg(name) {

@@ -3,18 +3,19 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>NEX-0</title>
 
-    <link rel="stylesheet" href="css/style.css">
-    <script type="module" src="js/main.js" defer></script>
+    <link href="css/style.css" rel="stylesheet">
+    <script defer src="js/main.js" type="module"></script>
 </head>
 
 <body>
-    <h1>NEX-0</h1>
+<h1>NEX-0</h1>
+<div style="display: flex;">
     <div class="cpu" data-arch="one-addr"></div>
-
-    <div class="mem" data-mem-size="5x5"></div>
+    <div id="shared-mem" class="mem" data-mem-size="8x8"></div>
+</div>
 </body>
 
 </html>

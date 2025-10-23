@@ -1,8 +1,3 @@
-import {CPUGenerator} from "./cpu/ui/cpu-generator.js";
-import {MemoryGenerator} from "./memory/ui/memory-generator.js";
+import {System} from "./system.js";
 
-const cpuGenerator = new CPUGenerator();
-cpuGenerator.generate();
-
-const memGenerator = new MemoryGenerator();
-memGenerator.generate();
+System.getInstance().generateHTML();
