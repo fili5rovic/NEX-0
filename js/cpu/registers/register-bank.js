@@ -2,13 +2,15 @@ export class RegisterBank {
     constructor(config) {
         this.regs = new Map();
 
-        config.forEach(reg => {
-            this.regs.set(reg.name.toLowerCase(), {
-                val: 0,
-                size: reg.size || 1,
-                readonly: reg.readonly || false,
-                broken: reg.broken || false
-            })
+        config.forEach(group => {
+            group.registers.forEach(reg => {
+                this.regs.set(reg.name.toLowerCase(), {
+                    val: 0,
+                    size: reg.size || 1,
+                    readonly: reg.readonly || false,
+                    broken: reg.broken || false
+                });
+            });
         });
     }
 

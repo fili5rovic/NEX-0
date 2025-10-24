@@ -1,4 +1,3 @@
-import {Executor} from "../simulator/executor/executor.js";
 import {DataLoader} from "../../util/data-loader.js";
 
 export class Architecture {
@@ -17,10 +16,6 @@ export class Architecture {
         }
     }
 
-    getExecutor() {
-        throw new Error('Abstract method must be implemented');
-    }
-
     getKeywords() {
         throw new Error('Abstract method must be implemented');
     }
@@ -35,16 +30,24 @@ export class OneAddrArchitecture extends Architecture {
         super();
     }
 
-    getExecutor() {
-        return new Executor(this.cpu);
-    }
-
     getKeywords() {
         return [
             'add', 'sub', 'mul', 'div', 'mod',
             'load', 'store',
             'neg', 'inc', 'dec', 'nop', 'halt',
             'jmp', 'jz', 'jnz', 'jg', 'jge', 'jl', 'jle'
+        ];
+    }
+}
+
+export class TwoAddrArchitecture extends Architecture {
+    constructor() {
+        super();
+    }
+
+    getKeywords() {
+        return [
+            // TODO
         ];
     }
 }

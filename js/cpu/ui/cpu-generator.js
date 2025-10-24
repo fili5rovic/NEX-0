@@ -40,23 +40,27 @@ export class CPUGenerator {
 
     #makeRegTableHtmlString(cpuElem) {
         const dataArch = cpuElem.getAttribute('data-arch');
-
         const regConfig = Architecture.regConfig(dataArch);
-        const ths = regConfig.map(entry => `<th>${entry.name}</th>`).join('\n\t\t\t\t');
 
-        const n = regConfig.length;
+        let rows = '';
 
-        const tds = Array(n).fill('<td>0</td>')
-            .join('\n\t\t\t\t');
+        for (const group of regConfig) {
+            let ths = '';
+            let tds = '';
 
-        return `<table data-role="regs-table">
-            <tr>
-                ${ths}
-            </tr>
-            <tr>
-                ${tds}
-            </tr>
-        </table>`;
+            for (const reg of group.registers) {
+                const colspan = reg.colspan || 1;
+                const colspanAttr = colspan > 1 ? ` colspan="${colspan}"` : '';
+
+                ths += `<th${colspanAttr}>${reg.name}</th>\n\t\t\t\t`;
+                tds += `<td${colspanAttr}>0</td>\n\t\t\t\t`;
+            }
+
+            rows += `<tr>\n\t\t\t\t${ths}\n\t\t\t</tr>\n\t\t`;
+            rows += `<tr>\n\t\t\t\t${tds}\n\t\t\t</tr>\n\t\t`;
+        }
+
+        return `<table data-role="regs-table">\n\t\t${rows}\n\t</table>`;
     }
 
     #makeEditorHtmlString() {

@@ -1,11 +1,21 @@
 [
-  {"name": "ACC"},
-  {"name": "R0"},
-  {"name": "R1"},
-  {"name": "R2"},
-  {"name": "R3"},
-  {"name": "R4"},
-  {"name": "R5"},
-  {"name": "R6"},
-  {"name": "R7"}
+
+  {
+    "group": "general",
+    "registers": [
+      {"name": "R0"},
+      {"name": "R1"},
+      {"name": "R2"},
+      {"name": "R3"},
+      {"name": "R4"},
+      {"name": "R5"},
+      {"name": "R6"}
+    ]
+  },
+  {
+    "group": "special",
+    "registers": [
+      {"name": "ACC", "colspan": 7}
+    ]
+  }
 ]
