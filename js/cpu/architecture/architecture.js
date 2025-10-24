@@ -1,4 +1,4 @@
-import {Executor} from "../simulator/executor.js";
+import {Executor} from "../simulator/executor/executor.js";
 import {DataLoader} from "../../util/data-loader.js";
 
 export class Architecture {
