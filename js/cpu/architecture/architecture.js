@@ -1,4 +1,5 @@
 import {Executor} from "../simulator/executor.js";
+import {DataLoader} from "../../util/data-loader.js";
 
 export class Architecture {
     constructor() {
@@ -24,8 +25,8 @@ export class Architecture {
         throw new Error('Abstract method must be implemented');
     }
 
-    regsConfig() {
-        throw new Error('Abstract method must be implemented');
+    static regConfig(name) {
+        return DataLoader.get(name);
     }
 }
 
@@ -45,19 +46,5 @@ export class OneAddrArchitecture extends Architecture {
             'neg', 'inc', 'dec', 'nop', 'halt',
             'jmp', 'jz', 'jnz', 'jg', 'jge', 'jl', 'jle'
         ];
-    }
-
-    regsConfig() {
-        return [
-            {name: 'ACC'},
-            {name: 'R0'},
-            {name: 'R1'},
-            {name: 'R2'},
-            {name: 'R3'},
-            {name: 'R4'},
-            {name: 'R5'},
-            {name: 'R6'},
-            {name: 'R7'},
-        ]
     }
 }

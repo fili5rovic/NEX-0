@@ -1,4 +1,4 @@
-import { Architecture } from "../architecture/architecture.js";
+import {Architecture} from "../architecture/architecture.js";
 import CPU from "../simulator/cpu.js";
 
 export class CPUGenerator {
@@ -20,8 +20,7 @@ export class CPUGenerator {
         }
 
         for (let i = 0; i < cpus.length; i++) {
-            if(this.cpuHtmlArr.at(i) === null)
-                continue;
+            if (this.cpuHtmlArr.at(i) === null) continue;
             const cpuElem = cpus[i];
             cpuElem.innerHTML = this.cpuHtmlArr[i];
             const cpu = new CPU(cpuElem);
@@ -41,13 +40,11 @@ export class CPUGenerator {
 
     #makeRegTableHtmlString(cpuElem) {
         const dataArch = cpuElem.getAttribute('data-arch');
-        const arch = Architecture.fromString(dataArch);
 
-        const ths = arch.regsConfig()
-            .map(entry => `<th>${entry.name}</th>`)
-            .join('\n\t\t\t\t');
+        const regConfig = Architecture.regConfig(dataArch);
+        const ths = regConfig.map(entry => `<th>${entry.name}</th>`).join('\n\t\t\t\t');
 
-        const n = arch.regsConfig().length;
+        const n = regConfig.length;
 
         const tds = Array(n).fill('<td>0</td>')
             .join('\n\t\t\t\t');

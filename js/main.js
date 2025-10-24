@@ -1,3 +1,6 @@
 import {System} from "./system.js";
+import {DataLoader} from "./util/data-loader.js";
 
-System.getInstance().generateHTML();
+DataLoader.init().then(()=>{
+    System.getInstance().generateHTML();
+})
