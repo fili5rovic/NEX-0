@@ -8,7 +8,8 @@ export class RegisterBank {
                     val: 0,
                     size: reg.size || 1,
                     readonly: reg.readonly || false,
-                    broken: reg.broken || false
+                    broken: reg.broken || false,
+                    radix: reg.radix || 10
                 });
             });
         });
@@ -21,6 +22,16 @@ export class RegisterBank {
             return 0;
         }
         return reg.val ?? 0;
+    }
+
+    getDisplay(name) {
+        name = name.toLowerCase();
+        const reg = this.regs.get(name);
+        if (reg == null || reg.broken) {
+            return 0;
+        }
+
+        return reg.val.toString(reg.radix);
     }
 
     set(name, val) {
@@ -47,4 +58,6 @@ export class RegisterBank {
             ret = ret - overflow;
         return ret;
     }
+
+
 }

@@ -70,6 +70,10 @@ class CPU extends EventTarget {
         return this.registerBank.get(name);
     }
 
+    getRegDisplay(name) {
+        return this.registerBank.getDisplay(name);
+    }
+
     setReg(name, val) {
         return this.registerBank.set(name, val);
     }

@@ -36,7 +36,7 @@ export class CPUDisplay {
         for (let i = 0; i < tds.length; i++) {
             const td = tds[i];
             const th = ths[i];
-            const newVal = (i === 0 ? this.cpu.getReg('acc') : this.cpu.getReg('r' + (i-1)));
+            const newVal = (i === 0 ? this.cpu.getRegDisplay('acc') : this.cpu.getRegDisplay('r' + (i-1)));
             if (anim) {
                 const oldVal = parseInt(td.innerText);
 
