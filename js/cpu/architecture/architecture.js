@@ -1,3 +1,5 @@
+import {Executor} from "../simulator/executor.js";
+
 export class Architecture {
     constructor() {
         if (this.constructor === Architecture) {
@@ -14,18 +16,26 @@ export class Architecture {
         }
     }
 
+    getExecutor() {
+        throw new Error('Abstract method must be implemented');
+    }
+
     getKeywords() {
         throw new Error('Abstract method must be implemented');
     }
 
     regsConfig() {
-        throw new Error('Abstract')
+        throw new Error('Abstract method must be implemented');
     }
 }
 
 export class OneAddrArchitecture extends Architecture {
     constructor() {
         super();
+    }
+
+    getExecutor() {
+        return new Executor(this.cpu);
     }
 
     getKeywords() {

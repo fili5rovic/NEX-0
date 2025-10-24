@@ -27,7 +27,7 @@ export class CPUGenerator {
             const cpu = new CPU(cpuElem);
             this.cpuMap.set(i, cpu);
 
-            cpu.initRunButtonListener();
+            cpu.initButtonListeners();
         }
     }
 
@@ -40,7 +40,8 @@ export class CPUGenerator {
     }
 
     #makeRegTableHtmlString(cpuElem) {
-        const arch = Architecture.fromString(cpuElem.getAttribute('data-arch'));
+        const dataArch = cpuElem.getAttribute('data-arch');
+        const arch = Architecture.fromString(dataArch);
 
         const ths = arch.regsConfig()
             .map(entry => `<th>${entry.name}</th>`)

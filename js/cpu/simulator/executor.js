@@ -1,7 +1,7 @@
 import {getLabelsMap, removeLabelsFromLine} from "./parser.js";
 import {System} from "../../system.js";
 
-class Executor {
+export class Executor {
 
     constructor(cpu) {
         this.cpu = cpu;
@@ -14,18 +14,25 @@ class Executor {
         this.labelMap = getLabelsMap(lines);
         this.nextJump = null;
 
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            this.currLineExecuting = i;
-            await this.execute(line, this.cpu);
-            if (this.cpu.isHalted())
-                break;
-            if (this.nextJump !== null) {
-                i = this.nextJump;
-                this.nextJump = null;
+        this.cpu.display.editorHandler.lockEditor();
+        try {
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                this.currLineExecuting = i;
+                await this.execute(line, this.cpu);
+                if (this.cpu.isHalted())
+                    break;
+                if (this.nextJump !== null) {
+                    i = this.nextJump;
+                    this.nextJump = null;
+                }
             }
-
+        } catch(e) {
+            console.warn(e);
+        } finally {
+            this.cpu.display.editorHandler.unlockEditor();
         }
+
         this.cpu.dispatchEvent(new CustomEvent('instruction-all-executed', {}));
     }
 
@@ -167,8 +174,6 @@ class Executor {
         }
     }
 }
-
-export default Executor;
 
 function isJumpInstruction(instruction) {
     return /^(jmp|jz|jnz|jg|jge|jl|jle)$/.test(instruction);

@@ -1,8 +1,8 @@
-import { RegisterBank } from "../registers/register-bank.js";
-import Executor from "./executor.js";
+import {RegisterBank} from "../registers/register-bank.js";
+import {Executor} from "./executor.js";
 
-import { CPUDisplay } from "../ui/cpu-display.js"
-import { Architecture } from "../architecture/architecture.js";
+import {CPUDisplay} from "../ui/cpu-display.js"
+import {Architecture} from "../architecture/architecture.js";
 import {extractCode} from "./parser.js";
 
 class CPU extends EventTarget {
@@ -19,27 +19,25 @@ class CPU extends EventTarget {
         this.executor = new Executor(this);
         this.registerBank = new RegisterBank(this.architecture.regsConfig());
 
-        this.halted = false;
         this.executionTime = 1000;
         this.running = false;
     }
 
-    initRunButtonListener() {
+    initButtonListeners() {
         this.runBtn.addEventListener('click', () => {
             if (this.running) return;
 
-            this.runningPromise = this.startExecution();
+            this.startExecution();
         });
-        this.stopBtn.addEventListener('click', ()=>{
-            if(!this.running)
+        this.stopBtn.addEventListener('click', () => {
+            if (!this.running)
                 return;
-            this.halted = true;
+            this.sendHalt();
         })
     }
 
     async startExecution() {
         this.running = true;
-        this.halted = false;
         this.runBtn.disabled = true;
         this.runBtn.textContent = 'Running...';
 
@@ -75,15 +73,16 @@ class CPU extends EventTarget {
     }
 
     sendHalt() {
-        this.halted = true;
+        this.running = false;
     }
 
     isHalted() {
-        return this.halted;
+        return !this.running;
     }
 
     getCpuElem() {
         return this.cpuElem;
     }
 }
+
 export default CPU;

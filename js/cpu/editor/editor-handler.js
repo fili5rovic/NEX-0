@@ -9,26 +9,25 @@ export class EditorHandler {
 
         this.currentLineIndex = null;
 
-        this.editor.addEventListener('input', this.updateHighlight);
-        this.editor.addEventListener('keydown', this.handleTab);
+        this.editor.addEventListener('input', this.handleInput);
+        this.editor.addEventListener('keydown', this.handleKeyDown);
         this.editor.addEventListener('scroll', this.handleScroll);
 
         this.updateHighlight();
     }
 
-    handleTab = (e) => {
+    handleInput = () => {
+        this.updateHighlight();
+    }
+
+    handleKeyDown = (e) => {
         if (e.key === 'Tab') {
             e.preventDefault();
-
             const start = this.editor.selectionStart;
             const end = this.editor.selectionEnd;
             const value = this.editor.value;
             this.editor.value = value.substring(0, start) + '\t' + value.substring(end);
-
             this.editor.selectionStart = this.editor.selectionEnd = start + 1;
-
-            this.updateHighlight();
-
             this.editor.dispatchEvent(new Event('input'));
         }
     }
@@ -90,6 +89,14 @@ export class EditorHandler {
         const scrollTop = lineNumber * lineHeight - this.editor.clientHeight / 2;
         this.editor.scrollTop = Math.max(0, scrollTop);
         this.handleScroll();
+    }
+
+    lockEditor() {
+        this.editor.readOnly = true;
+    }
+
+    unlockEditor() {
+        this.editor.readOnly = false;
     }
 }
 
