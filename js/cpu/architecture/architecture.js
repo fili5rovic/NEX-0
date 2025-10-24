@@ -8,8 +8,8 @@ export class Architecture {
         }
     }
 
-    static fromString(name) {
-        switch (name) {
+    static fromString(archType) {
+        switch (archType) {
             case 'one-addr':
                 return new OneAddrArchitecture();
             default:

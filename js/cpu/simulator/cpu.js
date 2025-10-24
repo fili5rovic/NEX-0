@@ -9,17 +9,17 @@ class CPU extends EventTarget {
     constructor(cpuElem) {
         super();
         this.cpuElem = cpuElem;
-        const archAttr = cpuElem.getAttribute('data-arch');
-        this.architecture = Architecture.fromString(archAttr);
+        this.archType = cpuElem.getAttribute('data-arch');
+        this.architecture = Architecture.fromString(this.archType);
 
         this.editor = cpuElem.querySelector('[data-role="editor"]');
         this.runBtn = cpuElem.querySelector('[data-role="runBtn"]');
         this.stopBtn = cpuElem.querySelector('[data-role="stopBtn"]');
 
         this.display = new CPUDisplay(this);
-        this.executor = new Executor(this);
+        this.executor = Executor.fromCPU(this);
 
-        this.registerBank = new RegisterBank(Architecture.regConfig(archAttr));
+        this.registerBank = new RegisterBank(Architecture.regConfig(this.archType));
 
         this.executionTime = 1000;
         this.running = false;

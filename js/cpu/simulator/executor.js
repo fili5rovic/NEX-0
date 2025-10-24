@@ -1,5 +1,6 @@
 import {getLabelsMap, removeLabelsFromLine} from "./parser.js";
 import {System} from "../../system.js";
+import cpu from "./cpu.js";
 
 export class Executor {
 
@@ -35,6 +36,30 @@ export class Executor {
 
         this.cpu.dispatchEvent(new CustomEvent('instruction-all-executed', {}));
     }
+
+    async execute(line, cpu) {
+        throw new Error('Abstract class');
+    }
+
+
+    static fromCPU(cpu) {
+        const type = cpu.archType;
+        switch (type) {
+            case 'one-addr':
+                return new OneAddrExecutor(cpu);
+            default:
+                console.log('Unknown arch. Defaulting to one-addr');
+                return new OneAddrExecutor(cpu);
+        }
+    }
+
+}
+
+export class OneAddrExecutor extends Executor {
+    constructor(cpu) {
+        super(cpu);
+    }
+
 
     async execute(line, cpu) {
         line = removeLabelsFromLine(line);
