@@ -36,9 +36,9 @@ export class CPUDisplay {
         for (let i = 0; i < tds.length; i++) {
             const td = tds[i];
             const th = ths[i];
-            const newVal = (i === 0 ? this.cpu.getRegDisplay('acc') : this.cpu.getRegDisplay('r' + (i-1)));
+            const newVal = this.cpu.getRegDisplay(th.innerText);
             if (anim) {
-                const oldVal = parseInt(td.innerText);
+                const oldVal = td.innerText;
 
                 if (oldVal !== newVal) {
                     td.style.animationDuration = `${this.cpu.executionTime}ms`;

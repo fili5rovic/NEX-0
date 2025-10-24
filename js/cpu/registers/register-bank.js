@@ -6,7 +6,7 @@ export class RegisterBank {
             group.registers.forEach(reg => {
                 this.regs.set(reg.name.toLowerCase(), {
                     val: 0,
-                    size: reg.size || 1,
+                    size: reg.size || 8,
                     readonly: reg.readonly || false,
                     broken: reg.broken || false,
                     radix: reg.radix || 10
@@ -51,11 +51,12 @@ export class RegisterBank {
         }
     }
 
-    handleOverflow(number, regSize = 1) {
-        const overflow = 256 * regSize;
+    handleOverflow(number, getBitSize = 8) {
+        const overflow = 2 ** getBitSize;
+        console.log(overflow);
         let ret = ((number % overflow) + overflow) % overflow;
-        if (ret >= overflow / 2)
-            ret = ret - overflow;
+        // if (ret >= overflow / 2)
+        //     ret = ret - overflow;
         return ret;
     }
 

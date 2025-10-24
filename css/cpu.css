@@ -95,8 +95,17 @@ th {
     text-align: center;
     padding: 6px 4px;
     user-select: none;
-    border-bottom: 1px solid #333;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
     background-color: #222222;
+}
+
+td {
+    border-bottom: 1px solid #333;
+}
+
+th {
+    border-top: 1px solid #333;
 }
 
 td.changed,

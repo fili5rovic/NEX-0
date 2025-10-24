@@ -9,13 +9,15 @@
       {"name": "R3"},
       {"name": "R4"},
       {"name": "R5"},
-      {"name": "R6"}
+      {"name": "R6"},
+      {"name": "R7"}
+
     ]
   },
   {
     "group": "special",
     "registers": [
-      {"name": "ACC", "colspan": 7}
+      {"name": "ACC", "colspan": 4, "size": 1}
     ]
   }
 ]
