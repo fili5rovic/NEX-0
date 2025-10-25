@@ -7,6 +7,7 @@ export class CPUDisplay {
         this.regTable = cpu.getCpuElem().querySelector('[data-role="regs-table"]');
 
         this.subscribeToEvents();
+        this.updateRegisters(false);
     }
 
     subscribeToEvents() {
@@ -36,7 +37,8 @@ export class CPUDisplay {
         for (let i = 0; i < tds.length; i++) {
             const td = tds[i];
             const th = ths[i];
-            const newVal = this.cpu.getRegDisplay(th.innerText);
+            const regNameAttr = th.getAttribute('data-regName');
+            const newVal = this.cpu.getRegDisplay(regNameAttr || th.innerText);
             if (anim) {
                 const oldVal = td.innerText;
 

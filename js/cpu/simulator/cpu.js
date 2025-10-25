@@ -16,10 +16,11 @@ class CPU extends EventTarget {
         this.runBtn = cpuElem.querySelector('[data-role="runBtn"]');
         this.stopBtn = cpuElem.querySelector('[data-role="stopBtn"]');
 
+        this.registerBank = new RegisterBank(Architecture.regConfig(this.archType));
+
         this.display = new CPUDisplay(this);
         this.executor = ExecutorFactory.fromCPU(this);
 
-        this.registerBank = new RegisterBank(Architecture.regConfig(this.archType));
 
         this.executionTime = 1000;
         this.running = false;

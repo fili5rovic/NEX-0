@@ -52,7 +52,13 @@ export class CPUGenerator {
                 const colspan = reg.colspan || 1;
                 const colspanAttr = colspan > 1 ? ` colspan="${colspan}"` : '';
 
-                ths += `<th${colspanAttr}>${reg.name}</th>\n\t\t\t\t`;
+                if(reg.displayName) {
+                    const regNameAttr = ` data-regName="${reg.name}" `;
+                    ths += `<th${colspanAttr}${regNameAttr}>${reg.displayName || reg.name}</th>\n\t\t\t\t`;
+                } else {
+                    ths += `<th${colspanAttr}>${reg.name}</th>\n\t\t\t\t`;
+                }
+
                 tds += `<td${colspanAttr}>0</td>\n\t\t\t\t`;
             }
 

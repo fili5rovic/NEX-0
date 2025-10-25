@@ -30,22 +30,27 @@ export class OneAddrExecutor extends Executor {
             detail: {line, lineNumber, instruction, operand}
         }));
 
-
         await super.sleep(this.cpu.executionTime);
     }
 
 
-
     zeroOperandExecution(instruction, cpu) {
+
+        let newVal = 0;
+        const shouldChangePSW = !(instruction === 'nop' || instruction === 'halt');
+        const accVal = cpu.getReg('acc');
         switch (instruction) {
             case 'neg':
-                cpu.setReg('acc', -cpu.getReg('acc'));
+                newVal = - accVal;
+                cpu.setReg('acc', newVal);
                 break;
             case 'inc':
-                cpu.setReg('acc', cpu.getReg('acc') + 1);
+                newVal = accVal + 1;
+                cpu.setReg('acc', newVal);
                 break;
             case 'dec':
-                cpu.setReg('acc', cpu.getReg('acc') - 1);
+                newVal = accVal - 1
+                cpu.setReg('acc', newVal);
                 break;
             case 'nop':
                 break;
@@ -53,9 +58,11 @@ export class OneAddrExecutor extends Executor {
                 cpu.sendHalt();
                 break;
             default:
-                console.log('unknown');
+                console.log('unknown zero operand instruction');
                 break;
         }
+        if(shouldChangePSW)
+            this.changePSW(cpu,newVal);
     }
 
     jumpInstruction(instruction, operand, cpu) {
@@ -105,21 +112,31 @@ export class OneAddrExecutor extends Executor {
         const accVal = cpu.getReg('acc');
         const operandType = super.getOperandType(operand);
 
+        const shouldChangePSW = !(instruction === 'load' || instruction === 'store');
+
+        let newVal = 0;
+        const opVal = super.getValFromOperand(operand, cpu);
+
         switch (instruction) {
             case 'add':
-                cpu.setReg('acc', accVal + super.getValFromOperand(operand, cpu));
+                newVal = accVal + opVal;
+                cpu.setReg('acc', newVal);
                 break;
             case 'sub':
-                cpu.setReg('acc', accVal - super.getValFromOperand(operand, cpu));
+                newVal = accVal - opVal;
+                cpu.setReg('acc', newVal);
                 break;
             case 'mul':
-                cpu.setReg('acc', accVal * super.getValFromOperand(operand, cpu));
+                newVal = accVal * opVal;
+                cpu.setReg('acc', newVal);
                 break;
             case 'div':
-                cpu.setReg('acc', accVal / super.getValFromOperand(operand, cpu));
+                newVal = accVal / opVal;
+                cpu.setReg('acc', newVal);
                 break;
             case 'mod':
-                cpu.setReg('acc', accVal % super.getValFromOperand(operand, cpu));
+                newVal = accVal % opVal;
+                cpu.setReg('acc', newVal);
                 break;
             case 'load':
                 if (operandType === 'memdir' || operandType === 'memind' || operandType === 'regind') {
@@ -142,5 +159,17 @@ export class OneAddrExecutor extends Executor {
                 }
                 break;
         }
+        if (shouldChangePSW) {
+            this.changePSW(cpu,newVal);
+        }
+    }
+
+    changePSW(cpu,newVal) {
+        let pswVal = 0;
+        if (newVal === 0) pswVal |= 1;
+        if (newVal < 0) pswVal |= 2;
+        console.log('newVal:' + newVal);
+        console.log('pswVal: ' + pswVal);
+        cpu.setReg('psw', pswVal);
     }
 }

@@ -1,5 +1,4 @@
 [
-
   {
     "group": "general",
     "registers": [
@@ -11,13 +10,13 @@
       {"name": "R5"},
       {"name": "R6"},
       {"name": "R7"}
-
     ]
   },
   {
     "group": "special",
     "registers": [
-      {"name": "ACC", "colspan": 4, "size": 1}
+      {"name": "ACC", "colspan": 4},
+      {"name": "PSW", "colspan": 4 ,"displayName":"PSW<br>V C N Z", "radix": 2, "binaryWidth": 4 }
     ]
   }
 ]

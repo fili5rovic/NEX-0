@@ -9,7 +9,8 @@ export class RegisterBank {
                     size: reg.size || 8,
                     readonly: reg.readonly || false,
                     broken: reg.broken || false,
-                    radix: reg.radix || 10
+                    radix: reg.radix || 10,
+                    binaryWidth: reg.binaryWidth || 0
                 });
             });
         });
@@ -31,7 +32,16 @@ export class RegisterBank {
             return 0;
         }
 
-        return reg.val.toString(reg.radix);
+        if(reg.radix === 10)
+            return reg.val.toString(reg.radix);
+
+
+        let str = reg.val.toString(reg.radix).toUpperCase();
+        if (reg.binaryWidth > 0) {
+            str = str.padStart(reg.binaryWidth, "0");
+        }
+
+       return str.split("").join(" ");
     }
 
     set(name, val) {
@@ -53,10 +63,9 @@ export class RegisterBank {
 
     handleOverflow(number, getBitSize = 8) {
         const overflow = 2 ** getBitSize;
-        console.log(overflow);
         let ret = ((number % overflow) + overflow) % overflow;
-        // if (ret >= overflow / 2)
-        //     ret = ret - overflow;
+        if (ret >= overflow / 2)
+            ret = ret - overflow;
         return ret;
     }
 
