@@ -116,5 +116,12 @@ export class Executor {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    changePSW(cpu,newVal) {
+        let pswVal = 0;
+        if (newVal === 0) pswVal |= 1;
+        if (newVal < 0) pswVal |= 2;
+        cpu.setReg('psw', pswVal);
+    }
+
 }
 

@@ -62,7 +62,7 @@ export class OneAddrExecutor extends Executor {
                 break;
         }
         if(shouldChangePSW)
-            this.changePSW(cpu,newVal);
+            super.changePSW(cpu,newVal);
     }
 
     jumpInstruction(instruction, operand, cpu) {
@@ -73,7 +73,11 @@ export class OneAddrExecutor extends Executor {
             return;
         }
 
-        let acc = cpu.getReg('acc');
+        const psw = cpu.getReg('psw');
+
+        const pswZ = (psw & 1) === 1;
+        const pswN = (psw & 2) === 1;
+
         let shouldJump = false;
 
         switch (instruction) {
@@ -81,22 +85,22 @@ export class OneAddrExecutor extends Executor {
                 shouldJump = true;
                 break;
             case 'jz':
-                shouldJump = (acc === 0);
+                shouldJump = pswZ;
                 break;
             case 'jnz':
-                shouldJump = (acc !== 0);
+                shouldJump = !pswZ;
                 break;
             case 'jg':
-                shouldJump = (acc > 0);
+                shouldJump = !pswZ && !pswN;
                 break;
             case 'jge':
-                shouldJump = (acc >= 0);
+                shouldJump = !pswN;
                 break;
             case 'jl':
-                shouldJump = (acc < 0);
+                shouldJump = pswN;
                 break;
             case 'jle':
-                shouldJump = (acc <= 0);
+                shouldJump = pswN || pswZ;
                 break;
             default:
                 console.warn('unknown jump instruction');
@@ -160,16 +164,9 @@ export class OneAddrExecutor extends Executor {
                 break;
         }
         if (shouldChangePSW) {
-            this.changePSW(cpu,newVal);
+            super.changePSW(cpu,newVal);
         }
     }
 
-    changePSW(cpu,newVal) {
-        let pswVal = 0;
-        if (newVal === 0) pswVal |= 1;
-        if (newVal < 0) pswVal |= 2;
-        console.log('newVal:' + newVal);
-        console.log('pswVal: ' + pswVal);
-        cpu.setReg('psw', pswVal);
-    }
+
 }

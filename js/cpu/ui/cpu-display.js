@@ -39,24 +39,20 @@ export class CPUDisplay {
             const th = ths[i];
             const regNameAttr = th.getAttribute('data-regName');
             const newVal = this.cpu.getRegDisplay(regNameAttr || th.innerText);
-            if (anim) {
-                const oldVal = td.innerText;
 
-                if (oldVal !== newVal) {
-                    td.style.animationDuration = `${this.cpu.executionTime}ms`;
-                    th.style.animationDuration = `${this.cpu.executionTime}ms`;
+            const oldVal = td.innerText;
 
+            td.innerText = newVal;
+
+            if (anim && oldVal !== newVal) {
+                td.classList.add('changed');
+                th.classList.add('changed');
+
+                setTimeout(() => {
                     td.classList.remove('changed');
                     th.classList.remove('changed');
-
-                    void td.offsetWidth;
-                    void th.offsetWidth;
-
-                    td.classList.add('changed');
-                    th.classList.add('changed');
-                }
+                }, 600);
             }
-            td.innerText = newVal;
         }
     }
 
