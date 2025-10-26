@@ -44,18 +44,29 @@ export class Executor {
         return /^(jmp|jz|jnz|jg|jge|jl|jle)$/.test(instruction);
     }
 
+    OperandType = {
+        IMMEDIATE: 'immed',
+        REGISTER: 'regdir',
+        REG_INDIRECT: 'regind',
+        MEM_DIRECT: 'memdir',
+        MEM_INDIRECT: 'memind'
+    };
+
+    OPERAND_PATTERNS = [
+        { pattern: /^#(.+)$/, type: this.OperandType.IMMEDIATE },
+        { pattern: /^\(r\d+\)$/i, type: this.OperandType.REG_INDIRECT },
+        { pattern: /^r\d+$/i, type: this.OperandType.REGISTER },
+        { pattern: /^\((.+)\)$/, type: this.OperandType.MEM_INDIRECT },
+        { pattern: /^.+$/, type: this.OperandType.MEM_DIRECT }
+    ];
+
     getOperandType(operand) {
-        if (operand.startsWith('#')) {
-            return 'immed';
-        } else if (operand.startsWith('(r') && operand.endsWith(')')) {
-            return 'regind';
-        } else if (operand.startsWith('r')) {
-            return 'regdir';
-        } else if (operand.startsWith('(') && operand.endsWith(')')) {
-            return 'memind';
-        } else {
-            return 'memdir';
+        for (const { pattern, type } of this.OPERAND_PATTERNS) {
+            if (pattern.test(operand)) {
+                return type;
+            }
         }
+        throw new Error(`Invalid operand format: ${operand}`);
     }
 
     getAddressFromOperand(operand, cpu) {

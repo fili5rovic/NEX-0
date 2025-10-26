@@ -1,6 +1,6 @@
-import { EditorHandler} from "../editor/editor-handler.js"
+import { EditorHandler} from "../editor/editorHandler.js"
 
-export class CPUDisplay {
+export class CpuDisplay {
     constructor(cpu) {
         this.cpu = cpu;
         this.editorHandler = new EditorHandler(cpu);

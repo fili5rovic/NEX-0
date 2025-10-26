@@ -1,5 +1,5 @@
-import {MemoryGenerator} from "./memory/ui/memory-generator.js";
-import {CPUGenerator} from "./cpu/ui/cpu-generator.js";
+import {MemoryGenerator} from "./memory/ui/memoryGenerator.js";
+import {CpuGenerator} from "./cpu/ui/cpuGenerator.js";
 
 export class System {
     static #instance = null;
@@ -21,7 +21,7 @@ export class System {
     }
 
     init() {
-        this.cpuGenerator = new CPUGenerator();
+        this.cpuGenerator = new CpuGenerator();
         this.memGenerator = new MemoryGenerator();
     }
 

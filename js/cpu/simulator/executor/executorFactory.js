@@ -1,4 +1,4 @@
-import {OneAddrExecutor} from "./one-addr-executor.js";
+import {OneAddrExecutor} from "./oneAddrExecutor.js";
 
 export class ExecutorFactory {
     static fromCPU(cpu) {

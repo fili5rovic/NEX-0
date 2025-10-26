@@ -1,4 +1,4 @@
-import {DataLoader} from "../../util/data-loader.js";
+import {DataLoader} from "../../util/dataLoader.js";
 
 export class Architecture {
     constructor() {
@@ -12,6 +12,7 @@ export class Architecture {
             case 'one-addr':
                 return new OneAddrArchitecture();
             default:
+                console.log('defaulting to one-addr');
                 return new OneAddrArchitecture();
         }
     }

@@ -1,9 +1,9 @@
 import {RegisterBank} from "../registers/register-bank.js";
 
-import {CPUDisplay} from "../ui/cpu-display.js"
+import {CpuDisplay} from "../ui/cpuDisplay.js"
 import {Architecture} from "../architecture/architecture.js";
 import {extractCode} from "./parser.js";
-import {ExecutorFactory} from "./executor/executor-factory.js";
+import {ExecutorFactory} from "./executor/executorFactory.js";
 
 class CPU extends EventTarget {
     constructor(cpuElem) {
@@ -18,7 +18,7 @@ class CPU extends EventTarget {
 
         this.registerBank = new RegisterBank(Architecture.regConfig(this.archType));
 
-        this.display = new CPUDisplay(this);
+        this.display = new CpuDisplay(this);
         this.executor = ExecutorFactory.fromCPU(this);
 
 

@@ -1,6 +1,12 @@
 import {removeLabelsFromLine} from "../parser.js";
 import {Executor} from "./executor.js";
 import {System} from "../../../system.js";
+import {
+    ARITHMETIC_OPERATIONS,
+    JUMP_CONDITIONS,
+    SPECIAL_OPERATIONS,
+    UNARY_OPERATIONS
+} from "./operations/commonOperations.js";
 
 export class OneAddrExecutor extends Executor {
     constructor(cpu) {
@@ -35,34 +41,20 @@ export class OneAddrExecutor extends Executor {
 
 
     zeroOperandExecution(instruction, cpu) {
+        if (SPECIAL_OPERATIONS[instruction]) {
+            SPECIAL_OPERATIONS[instruction](cpu);
+            return;
+        }
 
         let newVal = 0;
-        const shouldChangePSW = !(instruction === 'nop' || instruction === 'halt');
         const accVal = cpu.getReg('acc');
-        switch (instruction) {
-            case 'neg':
-                newVal = - accVal;
-                cpu.setReg('acc', newVal);
-                break;
-            case 'inc':
-                newVal = accVal + 1;
-                cpu.setReg('acc', newVal);
-                break;
-            case 'dec':
-                newVal = accVal - 1
-                cpu.setReg('acc', newVal);
-                break;
-            case 'nop':
-                break;
-            case 'halt':
-                cpu.sendHalt();
-                break;
-            default:
-                console.log('unknown zero operand instruction');
-                break;
+
+        if (UNARY_OPERATIONS[instruction]) {
+            newVal = UNARY_OPERATIONS[instruction](accVal);
+            cpu.setReg('acc', newVal);
         }
-        if(shouldChangePSW)
-            super.changePSW(cpu,newVal);
+
+        super.changePSW(cpu, newVal);
     }
 
     jumpInstruction(instruction, operand, cpu) {
@@ -75,40 +67,12 @@ export class OneAddrExecutor extends Executor {
 
         const psw = cpu.getReg('psw');
 
-        const pswZ = (psw & 1) === 1;
-        const pswN = (psw & 2) === 1;
+        if (JUMP_CONDITIONS[instruction]) {
+            const shouldJump = JUMP_CONDITIONS[instruction](psw);
 
-        let shouldJump = false;
-
-        switch (instruction) {
-            case 'jmp':
-                shouldJump = true;
-                break;
-            case 'jz':
-                shouldJump = pswZ;
-                break;
-            case 'jnz':
-                shouldJump = !pswZ;
-                break;
-            case 'jg':
-                shouldJump = !pswZ && !pswN;
-                break;
-            case 'jge':
-                shouldJump = !pswN;
-                break;
-            case 'jl':
-                shouldJump = pswN;
-                break;
-            case 'jle':
-                shouldJump = pswN || pswZ;
-                break;
-            default:
-                console.warn('unknown jump instruction');
-                return;
-        }
-
-        if (shouldJump) {
-            this.nextJump = nextIndex;
+            if (shouldJump) {
+                this.nextJump = nextIndex;
+            }
         }
     }
 
@@ -121,27 +85,12 @@ export class OneAddrExecutor extends Executor {
         let newVal = 0;
         const opVal = super.getValFromOperand(operand, cpu);
 
+        if (ARITHMETIC_OPERATIONS[instruction]) {
+            newVal = ARITHMETIC_OPERATIONS[instruction](accVal, opVal);
+            cpu.setReg('acc', newVal);
+        }
+
         switch (instruction) {
-            case 'add':
-                newVal = accVal + opVal;
-                cpu.setReg('acc', newVal);
-                break;
-            case 'sub':
-                newVal = accVal - opVal;
-                cpu.setReg('acc', newVal);
-                break;
-            case 'mul':
-                newVal = accVal * opVal;
-                cpu.setReg('acc', newVal);
-                break;
-            case 'div':
-                newVal = accVal / opVal;
-                cpu.setReg('acc', newVal);
-                break;
-            case 'mod':
-                newVal = accVal % opVal;
-                cpu.setReg('acc', newVal);
-                break;
             case 'load':
                 if (operandType === 'memdir' || operandType === 'memind' || operandType === 'regind') {
                     const addr = super.getAddressFromOperand(operand, cpu);
@@ -164,7 +113,7 @@ export class OneAddrExecutor extends Executor {
                 break;
         }
         if (shouldChangePSW) {
-            super.changePSW(cpu,newVal);
+            super.changePSW(cpu, newVal);
         }
     }
 

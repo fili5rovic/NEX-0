@@ -1,7 +1,7 @@
 import {Architecture} from "../architecture/architecture.js";
 import CPU from "../simulator/cpu.js";
 
-export class CPUGenerator {
+export class CpuGenerator {
     constructor() {
         this.cpuHtmlArr = [];
         this.cpuMap = new Map();

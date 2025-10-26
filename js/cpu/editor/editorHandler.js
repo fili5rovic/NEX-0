@@ -66,10 +66,15 @@ export class EditorHandler {
         const keywordReg = new RegExp(`\\b(${this.keywords.join('|')})\\b`, 'gi');
 
         text = text.replace(/(;.*$)/gm, '<span class="comment">$1</span>');
+        text = text.replace(/^(\w+):/gm, '<span class="label">$1</span>:');
         text = text.replace(keywordReg, '<span class="keyword">$1</span>');
         text = text.replace(/\b([Rr][0-9]+)\b/g, '<span class="register">$1</span>');
         text = text.replace(/(#?\b\d+\b|0x[0-9A-Fa-f]+)/g, '<span class="number">$1</span>');
-
+        text = text.replace(/([()])/g, '<span class="brackets">$1</span>');
+        text = text.replace(
+            /(<span class="keyword">(?:jmp|jz|jnz|jg|jge|jl|jle)<\/span>)\s+(\w+)/gi,
+            '$1 <span class="label-call">$2</span>'
+        );
         return text;
     }
 
