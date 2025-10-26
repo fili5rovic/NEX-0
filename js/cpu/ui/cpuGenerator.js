@@ -32,17 +32,26 @@ export class CpuGenerator {
     }
 
     #makeInnerHtmlString(cpuElem) {
-        const regTableHtml = this.#makeRegTableHtmlString(cpuElem);
+        const cpuTypeAttr = cpuElem.getAttribute('data-cpu-type')
+        const cpuType = getCpuTypeForAttribute(cpuTypeAttr);
+
+
+        const titleHtml = this.#makeTitleHtmlString(cpuType);
+        const regTableHtml = this.#makeRegTableHtmlString(cpuType);
         const editorHtml = this.#makeEditorHtmlString();
         const controlHtml = this.#makeControlHtmlString();
 
-        return [regTableHtml, editorHtml, controlHtml].join('');
+        return [titleHtml,regTableHtml, editorHtml, controlHtml].join('');
     }
 
-    #makeRegTableHtmlString(cpuElem) {
-        const cpuType = cpuElem.getAttribute('data-cpu-type')
+    #makeTitleHtmlString(cpuType) {
+        if(!cpuType.displayName)
+            return '';
+        return `<div class="cpu-title">${cpuType.displayName}</div>\n`;
+    }
 
-        const dataArch = getCpuTypeForAttribute(cpuType).arch;
+    #makeRegTableHtmlString(cpuType) {
+        const dataArch = cpuType.arch;
         const regConfig = Architecture.regConfig(dataArch);
 
         let rows = '';
@@ -87,6 +96,7 @@ export class CpuGenerator {
             <input data-role="stopBtn" type="button" value="STOP">
         </div>`;
     }
+
 
 
 }
