@@ -1,15 +1,19 @@
 import {RegisterBank} from "../registers/register-bank.js";
-
 import {CpuDisplay} from "../ui/cpuDisplay.js"
 import {Architecture} from "../architecture/architecture.js";
 import {extractCode} from "./parser.js";
 import {ExecutorFactory} from "./executor/executorFactory.js";
+import {getCpuTypeForAttribute} from "../types/cpuTypes.js";
 
 class CPU extends EventTarget {
     constructor(cpuElem) {
         super();
         this.cpuElem = cpuElem;
-        this.archType = cpuElem.getAttribute('data-arch');
+        const cpuTypeAttr = cpuElem.getAttribute('data-cpu-type');
+
+        const cpuType = getCpuTypeForAttribute(cpuTypeAttr);
+
+        this.archType = cpuType.arch;
         this.architecture = Architecture.fromString(this.archType);
 
         this.editor = cpuElem.querySelector('[data-role="editor"]');
@@ -22,7 +26,7 @@ class CPU extends EventTarget {
         this.executor = ExecutorFactory.fromCPU(this);
 
 
-        this.executionTime = 1000;
+        this.executionTime = cpuType.executionTime;
         this.running = false;
     }
 
@@ -42,7 +46,6 @@ class CPU extends EventTarget {
     async startExecution() {
         this.running = true;
         this.runBtn.disabled = true;
-        this.runBtn.textContent = 'Running...';
 
         try {
             this.reset();
@@ -52,7 +55,6 @@ class CPU extends EventTarget {
         } finally {
             this.running = false;
             this.runBtn.disabled = false;
-            this.runBtn.textContent = 'RUN';
         }
     }
 
