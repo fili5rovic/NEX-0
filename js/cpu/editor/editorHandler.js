@@ -98,10 +98,15 @@ export class EditorHandler {
 
     lockEditor() {
         this.editor.readOnly = true;
+        this.editor.classList.add('editor-locked');
+        this.highlightLayer.classList.add('editor-locked');
+        this.editor.blur();
     }
 
     unlockEditor() {
         this.editor.readOnly = false;
+        this.editor.classList.remove('editor-locked');
+        this.highlightLayer.classList.remove('editor-locked');
     }
 }
 

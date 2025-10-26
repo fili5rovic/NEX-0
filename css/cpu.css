@@ -126,15 +126,26 @@ th {
 
 td.changed,
 th.changed {
-    background-color: rgba(255, 255, 255, 0.07); /* početna boja promena */
+    background-color: rgba(255, 255, 255, 0.07);
+}
+
+.editor-locked {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none;
 }
 
 
 .current-line {
+    display: inline-block;
+    width: 100%;
     border-left: 2px solid #2196F3;
-    padding-left: 11px;
     background-color: rgba(33, 150, 243, 0.12);
     transition: all 0.2s ease;
+    padding-left: 4px;
+    box-sizing: border-box;
 }
 
 [data-role="stopBtn"],
