@@ -78,7 +78,8 @@ class CPU extends EventTarget {
     }
 
     setReg(name, val) {
-        return this.registerBank.set(name, val);
+        this.registerBank.set(name, val);
+        this.dispatchEvent(new CustomEvent('reg-changed', {detail: {name,val}}));
     }
 
     sendHalt() {

@@ -1,4 +1,4 @@
-import { EditorHandler} from "../editor/editorHandler.js"
+import {EditorHandler} from "../editor/editorHandler.js"
 
 export class CpuDisplay {
     constructor(cpu) {
@@ -6,19 +6,29 @@ export class CpuDisplay {
         this.editorHandler = new EditorHandler(cpu);
         this.regTable = cpu.getCpuElem().querySelector('[data-role="regs-table"]');
 
+        this.regMap = this.#makeRegisterMap();
+
         this.subscribeToEvents();
-        this.updateRegisters(false);
+
+        this.prevChanged = [];
+        this.updateAllRegisters(false);
     }
 
     subscribeToEvents() {
         this.cpu.addEventListener('instruction-executing', (e) => {
+            this.clearPreviousChanged();
             this.highlightCurrentLine(e.detail.lineNumber);
-            this.updateRegisters();
         });
 
         this.cpu.addEventListener('instruction-all-executed', () => {
+            this.clearPreviousChanged();
             this.highlightCurrentLine(null);
         });
+
+        this.cpu.addEventListener('reg-changed', (e) => {
+            this.updateRegister(e.detail.name);
+        });
+
 
     }
 
@@ -26,33 +36,57 @@ export class CpuDisplay {
         this.editorHandler.setCurrentLine(lineNumber);
     }
 
-    // ovo treba promeniti, treba da slusam za specifican registar u cpu klasi i odatle da saljem event, ovako nekako:
-    // this.cpu.addEventListener('register-changed', (e) => {
-    //     this.updateSingleRegister(e.detail.index, e.detail.value);
-    // });
-    updateRegisters(anim = true) {
+    clearPreviousChanged() {
+        for (const elem of this.prevChanged) {
+            elem.classList.remove('changed');
+        }
+        this.prevChanged = [];
+    }
+
+    #makeRegisterMap() {
         const tds = this.regTable.querySelectorAll('td');
         const ths = this.regTable.querySelectorAll('th');
+
+        const map = new Map();
 
         for (let i = 0; i < tds.length; i++) {
             const td = tds[i];
             const th = ths[i];
-            const regNameAttr = th.getAttribute('data-regName');
-            const newVal = this.cpu.getRegDisplay(regNameAttr || th.innerText);
 
-            const oldVal = td.innerText;
+            const regNameAttr = th.getAttribute('data-regName')?.toLowerCase();
 
-            td.innerText = newVal;
+            const regName = th.innerHTML.toLowerCase();
+            map.set(regNameAttr || regName, {th, td});
+        }
+        return map;
+    }
 
-            if (anim && oldVal !== newVal) {
-                td.classList.add('changed');
-                th.classList.add('changed');
+    updateRegister(name, anim = true) {
+        if (!this.regMap.get(name)) {
+            console.log("No register found to update");
+            return;
+        }
+        const th = this.regMap.get(name).th;
+        const td = this.regMap.get(name).td;
 
-                setTimeout(() => {
-                    td.classList.remove('changed');
-                    th.classList.remove('changed');
-                }, 600);
-            }
+        const regNameAttr = th.getAttribute('data-regName');
+        const newVal = this.cpu.getRegDisplay(regNameAttr || th.innerText);
+
+        const oldVal = td.innerText;
+        td.innerText = newVal;
+
+        if (anim && oldVal !== newVal) {
+            td.classList.add('changed');
+            th.classList.add('changed');
+
+            this.prevChanged.push(th);
+            this.prevChanged.push(td);
+        }
+    }
+
+    updateAllRegisters(anim = true) {
+        for (const key of this.regMap.keys()) {
+            this.updateRegister(key, anim);
         }
     }
 
@@ -64,6 +98,6 @@ export class CpuDisplay {
         ths.forEach(th => th.classList.remove('changed'));
 
         this.editorHandler.clearCurrentLine();
-        this.updateRegisters(false);
+        this.updateAllRegisters(false);
     }
 }

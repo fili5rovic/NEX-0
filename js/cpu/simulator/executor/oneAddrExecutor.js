@@ -24,6 +24,10 @@ export class OneAddrExecutor extends Executor {
 
         const lineNumber = this.currLineExecuting;
 
+        cpu.dispatchEvent(new CustomEvent('instruction-executing', {
+            detail: {line, lineNumber, instruction, operand}
+        }));
+
         if (!operand) {
             this.zeroOperandExecution(instruction, cpu);
         } else if (super.isJumpInstruction(instruction)) {
@@ -31,10 +35,6 @@ export class OneAddrExecutor extends Executor {
         } else {
             this.oneOperandExecution(instruction, operand, cpu);
         }
-
-        cpu.dispatchEvent(new CustomEvent('instruction-executing', {
-            detail: {line, lineNumber, instruction, operand}
-        }));
 
         await super.sleep(this.cpu.executionTime);
     }

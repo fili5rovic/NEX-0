@@ -2,7 +2,7 @@ export const CpuTypes = {
     'cpu1': {
         'displayName': 'Intel 4004',
         'arch': 'one-addr',
-        'executionTime': 1000
+        'executionTime': 300
     },
     'cpu2': {
         'displayName': 'test',
