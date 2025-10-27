@@ -20,7 +20,7 @@ export class CpuDisplay {
             this.highlightCurrentLine(e.detail.lineNumber);
         });
 
-        this.cpu.addEventListener('instruction-all-executed', () => {
+        this.cpu.addEventListener('cpu-stop', () => {
             this.clearPreviousChanged();
             this.highlightCurrentLine(null);
         });

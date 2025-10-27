@@ -15,53 +15,52 @@ class CPU extends EventTarget {
 
         this.archType = cpuType.arch;
         this.architecture = Architecture.fromString(this.archType);
+        this.executionTime = cpuType.executionTime;
 
         this.editor = cpuElem.querySelector('[data-role="editor"]');
         this.runBtn = cpuElem.querySelector('[data-role="runBtn"]');
         this.stopBtn = cpuElem.querySelector('[data-role="stopBtn"]');
+        this.stepBtn = cpuElem.querySelector('[data-role="stepBtn"]');
+
 
         this.registerBank = new RegisterBank(Architecture.regConfig(this.archType));
 
         this.display = new CpuDisplay(this);
         this.executor = ExecutorFactory.fromCPU(this);
-
-
-        this.executionTime = cpuType.executionTime;
-        this.running = false;
     }
 
     initButtonListeners() {
         this.runBtn.addEventListener('click', () => {
-            if (this.running) return;
-
-            this.startExecution();
+            this.executeAll();
+        });
+        this.stepBtn.addEventListener('click', () => {
+            this.nextStep();
         });
         this.stopBtn.addEventListener('click', () => {
-            if (!this.running)
-                return;
-            this.sendHalt();
+            this.stop();
         })
     }
 
-    async startExecution() {
-        this.running = true;
-        this.runBtn.disabled = true;
+    nextStep() {
+        const lines = this.getCodeLines();
+        this.executor.runStep(lines);
+    }
+
+
+    async executeAll() {
+        const lines = this.getCodeLines();
 
         try {
-            this.reset();
-            await this.runCode(this.editor.value);
-        } catch (error) {
-            console.error('Execution error:', error);
-        } finally {
-            this.running = false;
-            this.runBtn.disabled = false;
+            await this.executor.runAll(lines);
+        } catch(e) {
+            console.warn('error:' + e)
         }
     }
 
-    async runCode(code) {
+    getCodeLines() {
+        let code = this.editor.value;
         code = extractCode(code);
-        let lines = code.split('\n');
-        await this.executor.run(lines);
+        return code.split('\n');
     }
 
     reset() {
@@ -83,11 +82,13 @@ class CPU extends EventTarget {
     }
 
     sendHalt() {
-        this.running = false;
+        // ja ovde treba da kazem da nece vise biti instrukcija, to je todo
     }
 
-    isHalted() {
-        return !this.running;
+    stop() {
+        this.dispatchEvent(new CustomEvent('cpu-stop', {}));
+        this.executor.stop();
+        this.reset();
     }
 
     getCpuElem() {

@@ -14,7 +14,7 @@ export class OneAddrExecutor extends Executor {
     }
 
 
-    async execute(line, cpu, lineNumber) {
+    execute(line, cpu, lineNumber) {
         line = removeLabelsFromLine(line);
         line = line.toLowerCase().trim();
         if (!line) return null;
@@ -33,8 +33,6 @@ export class OneAddrExecutor extends Executor {
         } else {
             this.oneOperandExecution(instruction, operand, cpu);
         }
-
-        await super.sleep(this.cpu.executionTime);
     }
 
 

@@ -7,39 +7,64 @@ export class Executor {
         this.cpu = cpu;
         this.labelMap = null;
         this.nextJump = null;
+        this.nextStep = null;
+        this.isStopped = false;
     }
 
-    async execute(line, cpu, lineNumber) {
+    execute(line, cpu, lineNumber) {
         throw new Error("Abstract class can't execute methods");
     }
 
-    async run(lines) {
-        this.labelMap = getLabelsMap(lines);
-        this.nextJump = null;
-
-        this.cpu.display.editorHandler.lockEditor();
-        try {
-            let curr = 0;
-            while (curr < lines.length) {
-                const line = lines[curr];
-                await this.execute(line, this.cpu, curr);
-                if (this.cpu.isHalted())
-                    break;
-
-                if (this.nextJump !== null) {
-                    curr = this.nextJump;
-                    this.nextJump = null;
-                } else {
-                    curr++;
-                }
-            }
-        } catch (e) {
-            console.warn(e);
-        } finally {
-            this.cpu.display.editorHandler.unlockEditor();
+    runStep(lines) {
+        if(this.nextStep === null) {
+            this.nextStep = 0;
+            this.cpu.reset();
         }
 
-        this.cpu.dispatchEvent(new CustomEvent('instruction-all-executed', {}));
+        if (this.nextStep >= lines.length) {
+            this.reset();
+            this.cpu.reset();
+            return;
+        }
+
+        this.labelMap = getLabelsMap(lines);
+
+        const curr = this.nextStep ?? 0;
+        const line = lines[curr];
+        this.execute(line, this.cpu, curr);
+
+        if (this.nextJump !== null) {
+            this.nextStep = this.nextJump;
+            this.nextJump = null;
+        } else {
+            this.nextStep++;
+        }
+    }
+
+    async runAll(lines) {
+        this.isStopped = false;
+        this.nextStep = 0;
+        this.cpu.reset();
+
+        while(this.nextStep < lines.length && !this.isStopped) {
+            this.runStep(lines);
+            await this.sleep(this.cpu.executionTime);
+        }
+
+        this.reset();
+        if (!this.isStopped) {
+            this.cpu.reset();
+        }
+    }
+
+    stop() {
+        this.isStopped = true;
+        this.reset();
+    }
+
+    reset() {
+        this.nextStep = null;
+        this.nextJump = null;
     }
 
     isJumpInstruction(instruction) {
