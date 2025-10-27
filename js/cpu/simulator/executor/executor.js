@@ -7,8 +7,8 @@ export class Executor {
         this.cpu = cpu;
         this.labelMap = null;
         this.nextJump = null;
-        this.nextStep = null;
-        this.isStopped = false;
+        this.nextStep = 0;
+        this.isStopped = true;
     }
 
     execute(line, cpu, lineNumber) {
@@ -16,20 +16,21 @@ export class Executor {
     }
 
     runStep(lines) {
-        if(this.nextStep === null) {
+        if (this.isStopped) {
+            this.isStopped = false;
             this.nextStep = 0;
             this.cpu.reset();
         }
 
         if (this.nextStep >= lines.length) {
-            this.reset();
+            this.stop();
             this.cpu.reset();
             return;
         }
 
         this.labelMap = getLabelsMap(lines);
 
-        const curr = this.nextStep ?? 0;
+        const curr = this.nextStep;
         const line = lines[curr];
         this.execute(line, this.cpu, curr);
 
@@ -51,22 +52,19 @@ export class Executor {
             await this.sleep(this.cpu.executionTime);
         }
 
-        this.reset();
-        if (!this.isStopped) {
+        const wasStoppedByUser = this.isStopped;
+        this.stop();
+
+        if (!wasStoppedByUser) {
             this.cpu.reset();
         }
     }
 
     stop() {
         this.isStopped = true;
-        this.reset();
-    }
-
-    reset() {
-        this.nextStep = null;
+        this.nextStep = 0;
         this.nextJump = null;
     }
-
     isJumpInstruction(instruction) {
         return /^(jmp|jz|jnz|jg|jge|jl|jle)$/.test(instruction);
     }
@@ -117,11 +115,11 @@ export class Executor {
     }
 
     /*
-    immediate -> same number (#5 -> 5)
-    regdir -> read reg (r0 -> value in r0)
-    regind -> read mem at address in reg ((r0) -> mem[r0])
-    memind -> read mem from number ((0x10) -> mem[0x10])
-    memdir -> same number (0x10 -> 0x10)
+    immediate -> same number (#5 -> 5) <br>
+    regdir -> read reg (r0 -> value in r0) <br>
+    regind -> read mem at address in reg ((r0) -> mem[r0]) <br>
+    memind -> read mem from number ((0x10) -> mem[0x10]) <br>
+    memdir -> same number (0x10 -> 0x10) <br>
     */
     getValFromOperand(operand, cpu) {
         const type = this.getOperandType(operand);

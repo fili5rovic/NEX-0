@@ -50,10 +50,16 @@ class CPU extends EventTarget {
     async executeAll() {
         const lines = this.getCodeLines();
 
+        this.runBtn.disabled = true;
+        this.stepBtn.disabled = true;
+
         try {
             await this.executor.runAll(lines);
         } catch(e) {
             console.warn('error:' + e)
+        } finally {
+            this.runBtn.disabled = false;
+            this.stepBtn.disabled = false;
         }
     }
 
