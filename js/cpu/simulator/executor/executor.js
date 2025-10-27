@@ -7,10 +7,9 @@ export class Executor {
         this.cpu = cpu;
         this.labelMap = null;
         this.nextJump = null;
-        this.currLineExecuting = null;
     }
 
-    async execute(line, cpu) {
+    async execute(line, cpu, lineNumber) {
         throw new Error("Abstract class can't execute methods");
     }
 
@@ -20,15 +19,18 @@ export class Executor {
 
         this.cpu.display.editorHandler.lockEditor();
         try {
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i];
-                this.currLineExecuting = i;
-                await this.execute(line, this.cpu);
+            let curr = 0;
+            while (curr < lines.length) {
+                const line = lines[curr];
+                await this.execute(line, this.cpu, curr);
                 if (this.cpu.isHalted())
                     break;
+
                 if (this.nextJump !== null) {
-                    i = this.nextJump;
+                    curr = this.nextJump;
                     this.nextJump = null;
+                } else {
+                    curr++;
                 }
             }
         } catch (e) {
@@ -53,15 +55,15 @@ export class Executor {
     };
 
     OPERAND_PATTERNS = [
-        { pattern: /^#(.+)$/, type: this.OperandType.IMMEDIATE },
-        { pattern: /^\(r\d+\)$/i, type: this.OperandType.REG_INDIRECT },
-        { pattern: /^r\d+$/i, type: this.OperandType.REGISTER },
-        { pattern: /^\((.+)\)$/, type: this.OperandType.MEM_INDIRECT },
-        { pattern: /^.+$/, type: this.OperandType.MEM_DIRECT }
+        {pattern: /^#(.+)$/, type: this.OperandType.IMMEDIATE},
+        {pattern: /^\(r\d+\)$/i, type: this.OperandType.REG_INDIRECT},
+        {pattern: /^r\d+$/i, type: this.OperandType.REGISTER},
+        {pattern: /^\((.+)\)$/, type: this.OperandType.MEM_INDIRECT},
+        {pattern: /^.+$/, type: this.OperandType.MEM_DIRECT}
     ];
 
     getOperandType(operand) {
-        for (const { pattern, type } of this.OPERAND_PATTERNS) {
+        for (const {pattern, type} of this.OPERAND_PATTERNS) {
             if (pattern.test(operand)) {
                 return type;
             }
@@ -127,7 +129,7 @@ export class Executor {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    changePSW(cpu,newVal) {
+    changePSW(cpu, newVal) {
         let pswVal = 0;
         if (newVal === 0) pswVal |= 1;
         if (newVal < 0) pswVal |= 2;

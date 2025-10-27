@@ -14,15 +14,13 @@ export class OneAddrExecutor extends Executor {
     }
 
 
-    async execute(line, cpu) {
+    async execute(line, cpu, lineNumber) {
         line = removeLabelsFromLine(line);
         line = line.toLowerCase().trim();
         if (!line) return null;
         const parts = line.split(/\s+/);
         const instruction = parts[0];
         const operand = parts[1];
-
-        const lineNumber = this.currLineExecuting;
 
         cpu.dispatchEvent(new CustomEvent('instruction-executing', {
             detail: {line, lineNumber, instruction, operand}
@@ -59,7 +57,6 @@ export class OneAddrExecutor extends Executor {
 
     jumpInstruction(instruction, operand, cpu) {
         let nextIndex = this.labelMap.get(operand);
-        nextIndex--;
         if (isNaN(nextIndex)) {
             console.warn('label does not exist');
             return;
