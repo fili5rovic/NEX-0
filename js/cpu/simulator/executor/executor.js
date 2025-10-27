@@ -8,7 +8,7 @@ export class Executor {
         this.labelMap = null;
         this.nextJump = null;
         this.nextStep = 0;
-        this.isStopped = true;
+        this.isStopped = false;
     }
 
     execute(line, cpu, lineNumber) {
@@ -23,8 +23,9 @@ export class Executor {
         }
 
         if (this.nextStep >= lines.length) {
-            this.stop();
-            this.cpu.reset();
+            // otkomentarisi ako hoces da se loop-uje na poslednji step da ode na prvu instrukciju opet
+            // this.stop();
+            // this.cpu.reset();
             return;
         }
 
@@ -52,12 +53,8 @@ export class Executor {
             await this.sleep(this.cpu.executionTime);
         }
 
-        const wasStoppedByUser = this.isStopped;
         this.stop();
-
-        if (!wasStoppedByUser) {
-            this.cpu.reset();
-        }
+        this.cpu.dispatchEvent(new CustomEvent('cpu-highlight-clear', {}));
     }
 
     stop() {

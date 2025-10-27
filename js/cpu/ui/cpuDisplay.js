@@ -24,6 +24,10 @@ export class CpuDisplay {
             this.clearPreviousChanged();
             this.highlightCurrentLine(null);
         });
+        this.cpu.addEventListener('cpu-highlight-clear', () => {
+            this.clearPreviousChanged();
+            this.highlightCurrentLine(null);
+        });
 
         this.cpu.addEventListener('reg-changed', (e) => {
             this.updateRegister(e.detail.name);
