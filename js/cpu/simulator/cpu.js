@@ -4,6 +4,7 @@ import {Architecture} from "../architecture/architecture.js";
 import {extractCode} from "./parser.js";
 import {ExecutorFactory} from "./executor/executorFactory.js";
 import {getCpuTypeForAttribute} from "../types/cpuTypes.js";
+import {initTitleButtonListener} from "../ui/cpuSidebar.js";
 
 class CPU extends EventTarget {
     constructor(cpuElem) {
@@ -39,6 +40,8 @@ class CPU extends EventTarget {
         this.stopBtn.addEventListener('click', () => {
             this.stop();
         })
+
+        initTitleButtonListener(this.cpuElem);
     }
 
     nextStep() {

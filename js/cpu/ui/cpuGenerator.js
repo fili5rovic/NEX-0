@@ -41,13 +41,17 @@ export class CpuGenerator {
         const editorHtml = this.#makeEditorHtmlString();
         const controlHtml = this.#makeControlHtmlString();
 
-        return [titleHtml,regTableHtml, editorHtml, controlHtml].join('');
+        const mainContent = [titleHtml,regTableHtml, editorHtml, controlHtml].join('');
+        const mainDiv = `<div class="cpu-main-content">${mainContent}</div>`
+        const sideBar = this.#makeCpuInfoBarHtmlString();
+
+        return [mainDiv, sideBar].join('');
     }
 
     #makeTitleHtmlString(cpuType) {
         if(!cpuType.displayName)
             return '';
-        return `<div class="cpu-title">${cpuType.displayName}</div>\n`;
+        return `<button type="button" class="cpu-title">${cpuType.displayName}</button>\n`;
     }
 
     #makeRegTableHtmlString(cpuType) {
@@ -96,6 +100,12 @@ export class CpuGenerator {
             <input data-role="stepBtn" class="cpu-button" type="button" value="STEP">
             <input data-role="stopBtn" class="cpu-button" type="button" value="STOP">
         </div>`;
+    }
+
+    #makeCpuInfoBarHtmlString() {
+        return `<div class="cpu-sidebar">
+                <h3>Specs</h3>
+                </div>`;
     }
 
 
