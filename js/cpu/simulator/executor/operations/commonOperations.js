@@ -1,21 +1,21 @@
 export const ARITHMETIC_OPERATIONS =  {
-    'add': (acc, op) => acc + op,
-    'sub': (acc, op) => acc - op,
-    'mul': (acc, op) => acc * op,
-    'div': (acc, op) => Math.floor(acc / op),
-    'mod': (acc, op) => acc % op,
-    'and': (acc, op) => acc & op,
-    'or':  (acc, op) => acc | op,
-    'xor': (acc, op) => acc ^ op,
+    'add': (a, b) => a + b,
+    'sub': (a, b) => a - b,
+    'mul': (a, b) => a * b,
+    'div': (a, b) => Math.floor(a / b),
+    'mod': (a, b) => a % b,
+    'and': (a, b) => a & b,
+    'or':  (a, b) => a | b,
+    'xor': (a, b) => a ^ b,
 }
 
 export const UNARY_OPERATIONS = {
-    'neg': (acc) => -acc,
-    'inc': (acc) => acc + 1,
-    'dec': (acc) => acc - 1,
-    'not': (acc) => ~acc,
-    'shl': (acc) => acc << 1,
-    'shr': (acc) => acc >> 1,
+    'neg': (a) => -a,
+    'inc': (a) => a + 1,
+    'dec': (a) => a - 1,
+    'not': (a) => ~a,
+    'shl': (a) => a << 1,
+    'shr': (a) => a >> 1,
 };
 
 const PSW_FLAGS = {

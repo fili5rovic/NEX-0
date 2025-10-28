@@ -117,7 +117,7 @@ export class Executor {
         return /^(jmp|jz|jnz|jg|jge|jl|jle)$/.test(instruction);
     }
 
-    OperandType = {
+    static OperandType = {
         IMMEDIATE: 'immed',
         REGISTER: 'regdir',
         REG_INDIRECT: 'regind',
@@ -126,11 +126,11 @@ export class Executor {
     };
 
     OPERAND_PATTERNS = [
-        {pattern: /^#(.+)$/, type: this.OperandType.IMMEDIATE},
-        {pattern: /^\(r\d+\)$/i, type: this.OperandType.REG_INDIRECT},
-        {pattern: /^r\d+$/i, type: this.OperandType.REGISTER},
-        {pattern: /^\((.+)\)$/, type: this.OperandType.MEM_INDIRECT},
-        {pattern: /^.+$/, type: this.OperandType.MEM_DIRECT}
+        {pattern: /^#(.+)$/, type: Executor.OperandType.IMMEDIATE},
+        {pattern: /^\(r\d+\)$/i, type: Executor.OperandType.REG_INDIRECT},
+        {pattern: /^r\d+$/i, type: Executor.OperandType.REGISTER},
+        {pattern: /^\((.+)\)$/, type: Executor.OperandType.MEM_INDIRECT},
+        {pattern: /^.+$/, type: Executor.OperandType.MEM_DIRECT}
     ];
 
     getOperandType(operand) {
@@ -146,15 +146,15 @@ export class Executor {
         const type = this.getOperandType(operand);
 
         switch (type) {
-            case 'regind':
+            case Executor.OperandType.REG_INDIRECT:
                 const regName = operand.slice(1, -1);
                 return cpu.getReg(regName);
 
-            case 'memind':
+            case Executor.OperandType.MEM_INDIRECT:
                 const addr = parseInt(operand.slice(1, -1));
                 return System.getInstance().sharedMemory.get(addr);
 
-            case 'memdir':
+            case Executor.OperandType.MEM_DIRECT:
                 return parseInt(operand);
 
             default:
@@ -204,6 +204,7 @@ export class Executor {
         let pswVal = 0;
         if (newVal === 0) pswVal |= 1;
         if (newVal < 0) pswVal |= 2;
+
         cpu.setReg('psw', pswVal);
     }
 
