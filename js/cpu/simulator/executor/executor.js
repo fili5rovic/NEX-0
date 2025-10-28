@@ -1,4 +1,4 @@
-import {getLabelsMap} from "../parser.js";
+import {getLabelsMap, removeLabelsFromLine} from "../parser.js";
 import {System} from "../../../system.js";
 
 export class Executor {
@@ -11,8 +11,31 @@ export class Executor {
         this.isStopped = false;
     }
 
-    execute(line, cpu, lineNumber) {
-        throw new Error("Abstract class can't execute methods");
+    executeWrapper(line, cpu, lineNumber) {
+        line = removeLabelsFromLine(line);
+        line = line.toLowerCase().trim();
+        if (!line) return;
+        const parts = line.split(/\s+/);
+        const instruction = parts[0];
+        const operands = parts.slice(1);
+
+        cpu.dispatchEvent(new CustomEvent('instruction-executing', {
+            detail: {line, lineNumber, instruction, operands}
+        }));
+
+        if(instruction === 'nop')
+            return;
+
+        if(instruction === 'halt') {
+            this.nextStep = -2;
+            return;
+        }
+
+        this.execute(cpu, instruction, operands);
+    }
+
+    execute(cpu, instruction, operands) {
+        throw new Error('Executor is abstract. Execute called on abstract class.');
     }
 
     runStep(lines) {
@@ -21,8 +44,9 @@ export class Executor {
             this.nextStep = 0;
             this.cpu.reset();
         }
+        console.log(this.nextStep);
 
-        if (this.nextStep >= lines.length) {
+        if (this.nextStep === -1 || this.nextStep >= lines.length) {
             // otkomentarisi ako hoces da se loop-uje na poslednji step da ode na prvu instrukciju opet
             // this.stop();
             // this.cpu.reset();
@@ -33,7 +57,7 @@ export class Executor {
 
         const curr = this.nextStep;
         const line = lines[curr];
-        this.execute(line, this.cpu, curr);
+        this.executeWrapper(line, this.cpu, curr);
 
         if (this.nextJump !== null) {
             this.nextStep = this.nextJump;
@@ -155,6 +179,7 @@ export class Executor {
         if (newVal < 0) pswVal |= 2;
         cpu.setReg('psw', pswVal);
     }
+
 
 }
 

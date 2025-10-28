@@ -4,7 +4,6 @@ import {System} from "../../../system.js";
 import {
     ARITHMETIC_OPERATIONS,
     JUMP_CONDITIONS,
-    SPECIAL_OPERATIONS,
     UNARY_OPERATIONS
 } from "./operations/commonOperations.js";
 
@@ -14,17 +13,10 @@ export class OneAddrExecutor extends Executor {
     }
 
 
-    execute(line, cpu, lineNumber) {
-        line = removeLabelsFromLine(line);
-        line = line.toLowerCase().trim();
-        if (!line) return null;
-        const parts = line.split(/\s+/);
-        const instruction = parts[0];
-        const operand = parts[1];
-
-        cpu.dispatchEvent(new CustomEvent('instruction-executing', {
-            detail: {line, lineNumber, instruction, operand}
-        }));
+    execute(cpu, instruction, operands) {
+        const operand = operands[0];
+        if(operands.length > 1)
+            return;
 
         if (!operand) {
             this.zeroOperandExecution(instruction, cpu);
@@ -37,11 +29,6 @@ export class OneAddrExecutor extends Executor {
 
 
     zeroOperandExecution(instruction, cpu) {
-        if (SPECIAL_OPERATIONS[instruction]) {
-            SPECIAL_OPERATIONS[instruction](cpu);
-            return;
-        }
-
         let newVal = 0;
         const accVal = cpu.getReg('acc');
 

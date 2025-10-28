@@ -18,11 +18,6 @@ export const UNARY_OPERATIONS = {
     'shr': (acc) => acc >> 1,
 };
 
-export const SPECIAL_OPERATIONS = {
-    'nop': () => {},
-    'halt': (cpu) => cpu.sendHalt(),
-};
-
 const PSW_FLAGS = {
     ZERO:     0b0001,
     NEGATIVE: 0b0010,
