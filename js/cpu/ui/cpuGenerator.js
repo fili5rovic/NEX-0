@@ -104,7 +104,65 @@ export class CpuGenerator {
 
     #makeCpuInfoBarHtmlString() {
         return `<div class="cpu-sidebar">
-                <h3>Specs</h3>
+                    <h3>Specs</h3>
+                    <hr>
+                     <h4>MEMORY</h4>
+                    <table>
+                        <tr>
+                            <th>Instruction</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>LOAD</td>
+                            <td>ACC gets value of argument</td>
+                        </tr>
+                        <tr>
+                            <td>STORE</td>
+                            <td>argument gets value of ACC</td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <h4>ARITHMETIC</h4>
+                    <table>
+                        <tr>
+                            <th>Instruction</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>ADD</td>
+                            <td>adds two numbers</td>
+                        </tr>
+                        <tr>
+                            <td>SUB</td>
+                            <td>subtracts two numbers</td>
+                        </tr>
+                        <tr>
+                            <td>INC</td>
+                            <td>increments ACC by 1</td>
+                        </tr>
+                        <tr>
+                            <td>DEC</td>
+                            <td>decrements ACC by 1</td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <h4>JUMPS</h4>
+                    <table>
+                        <tr>
+                            <th>Instruction</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>JG</td>
+                            <td>jump if PSW.Z == 0 and PSW.N == 0</td>
+                        </tr>
+                        <tr>
+                            <td>JGE</td>
+                            <td>jump if PSW.N == 0</td>
+                        </tr>
+                        <hr>
+                    </table>
+                    <hr>
                 </div>`;
     }
 

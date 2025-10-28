@@ -16,12 +16,24 @@
 
 .cpu-sidebar {
     display: none;
-    width: 200px;
+    width: 300px;
     height: 500px;
-    background-color: #4a4a4a;
+    background-color: #1b1b1b;
     border-radius: 15px;
     text-align: center;
     margin:auto;
+}
+
+
+.cpu-sidebar * {
+    font-family: Monospaced, monospace;
+    color: gray;
+}
+
+.cpu-sidebar  hr {
+    border: none;
+    height: 1px;
+    background-color: rgb(34, 34, 34); /* Use background-color for a solid bar */
 }
 
 .cpu-title {
