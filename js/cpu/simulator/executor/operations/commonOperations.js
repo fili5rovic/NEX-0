@@ -26,7 +26,7 @@ const PSW_FLAGS = {
 };
 
 export const JUMP_CONDITIONS = {
-    'jmp': (psw) => true,
+    'jmp': () => true,
     'jz':  (psw) => (psw & PSW_FLAGS.ZERO) !== 0,
     'jnz': (psw) => (psw & PSW_FLAGS.ZERO) === 0,
     'jg':  (psw) => {return (psw & PSW_FLAGS.ZERO) === 0 && (psw & PSW_FLAGS.NEGATIVE) === 0;},

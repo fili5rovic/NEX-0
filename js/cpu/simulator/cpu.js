@@ -55,14 +55,15 @@ class CPU extends EventTarget {
 
         this.runBtn.disabled = true;
         this.stepBtn.disabled = true;
-
         try {
+            this.display.editorHandler.lockEditor();
             await this.executor.runAll(lines);
         } catch(e) {
             console.warn('error:' + e)
         } finally {
             this.runBtn.disabled = false;
             this.stepBtn.disabled = false;
+            this.display.editorHandler.unlockEditor();
         }
     }
 

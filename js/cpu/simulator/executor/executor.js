@@ -11,10 +11,16 @@ export class Executor {
         this.isStopped = false;
     }
 
+    static HALTED = -1;
+
+    /**
+     * used to wrap execute(), parses the instruction and operands, but also deals with NOP and HALT.
+     * @param line one line that should be executed
+     * @param cpu cpu where line should be executed
+     * @param lineNumber the number of current line being executed
+     * @return {boolean} true if instruction was executed, false otherwise.
+     */
     executeWrapper(line, cpu, lineNumber) {
-        line = removeLabelsFromLine(line);
-        line = line.toLowerCase().trim();
-        if (!line) return;
         const parts = line.split(/\s+/);
         const instruction = parts[0];
         const operands = parts.slice(1);
@@ -24,29 +30,32 @@ export class Executor {
         }));
 
         if(instruction === 'nop')
-            return;
+            return true;
 
         if(instruction === 'halt') {
-            this.nextStep = -2;
-            return;
+            this.nextStep = Executor.HALTED - 1;
+            return true;
         }
 
         this.execute(cpu, instruction, operands);
+        return true;
     }
 
     execute(cpu, instruction, operands) {
         throw new Error('Executor is abstract. Execute called on abstract class.');
     }
 
+    /**
+     * Executes next step in code. Skips labels and empty lines.
+     * @param lines array of lines that should be executed.
+     */
     runStep(lines) {
         if (this.isStopped) {
             this.isStopped = false;
             this.nextStep = 0;
             this.cpu.reset();
         }
-        console.log(this.nextStep);
-
-        if (this.nextStep === -1 || this.nextStep >= lines.length) {
+        if (this.nextStep === Executor.HALTED || this.nextStep >= lines.length) {
             // otkomentarisi ako hoces da se loop-uje na poslednji step da ode na prvu instrukciju opet
             // this.stop();
             // this.cpu.reset();
@@ -55,9 +64,18 @@ export class Executor {
 
         this.labelMap = getLabelsMap(lines);
 
-        const curr = this.nextStep;
-        const line = lines[curr];
-        this.executeWrapper(line, this.cpu, curr);
+        while (this.nextStep < lines.length) {
+            const curr = this.nextStep;
+            let line = lines[curr];
+            line = removeLabelsFromLine(line);
+            line = line.toLowerCase().trim();
+            if (line) {
+                const executed = this.executeWrapper(line, this.cpu, curr);
+                if (executed)
+                    break;
+            }
+            this.nextStep++;
+        }
 
         if (this.nextJump !== null) {
             this.nextStep = this.nextJump;
@@ -67,12 +85,21 @@ export class Executor {
         }
     }
 
+    /**
+     * Runs all lines in 'RUN' mode, executing each line sequentially.
+     * Pauses between steps for visual effect based on cpu.executionTime.
+     * Stops automatically if the CPU is halted or manually stopped.
+     *
+     * @param {string[]} lines - Array of code lines to be executed.
+     * @return {Promise<void>} Resolves when execution finishes.
+     * @fires {CustomEvent} 'cpu-highlight-clear'
+     */
     async runAll(lines) {
         this.isStopped = false;
         this.nextStep = 0;
         this.cpu.reset();
 
-        while(this.nextStep < lines.length && !this.isStopped) {
+        while(this.nextStep < lines.length && this.nextStep !== Executor.HALTED && !this.isStopped) {
             this.runStep(lines);
             await this.sleep(this.cpu.executionTime);
         }

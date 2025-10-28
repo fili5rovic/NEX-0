@@ -1,4 +1,3 @@
-import {removeLabelsFromLine} from "../parser.js";
 import {Executor} from "./executor.js";
 import {System} from "../../../system.js";
 import {
