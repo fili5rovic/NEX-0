@@ -13,6 +13,7 @@ export const CpuTypes = {
 
 export function getCpuTypeForAttribute(dataTypeAttr) {
     if(!dataTypeAttr) {
+        console.warn('Attribute is undefined. Defaulting to first cpu.');
         return CpuTypes[Object.keys(CpuTypes)[0]];
     }
 
