@@ -5,6 +5,7 @@ import {extractCode} from "./parser.js";
 import {ExecutorFactory} from "./executor/executorFactory.js";
 import {getCpuTypeForAttribute} from "../types/cpuTypes.js";
 import {initTitleButtonListener} from "../ui/cpuSidebar.js";
+import {System} from "../../system.js";
 
 class CPU extends EventTarget {
     constructor(cpuElem) {
@@ -32,13 +33,13 @@ class CPU extends EventTarget {
 
     initButtonListeners() {
         this.runBtn.addEventListener('click', () => {
-            this.executeAll();
+            System.getInstance().runCpus();
         });
         this.stepBtn.addEventListener('click', () => {
-            this.nextStep();
+            System.getInstance().stepCpus();
         });
         this.stopBtn.addEventListener('click', () => {
-            this.stop();
+            System.getInstance().stopCpus();
         })
 
         initTitleButtonListener(this.cpuElem);

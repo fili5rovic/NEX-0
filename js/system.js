@@ -25,6 +25,24 @@ export class System {
         this.memGenerator = new MemoryGenerator();
     }
 
+    runCpus() {
+        this.cpuGenerator.cpuMap.forEach(cpu => {
+            cpu.executeAll()
+        })
+    }
+
+    stepCpus() {
+        this.cpuGenerator.cpuMap.forEach(cpu => {
+            cpu.nextStep();
+        })
+    }
+
+    stopCpus() {
+        this.cpuGenerator.cpuMap.forEach(cpu => {
+            cpu.stop();
+        })
+    }
+
     generateHTML() {
         this.cpuGenerator.generate();
         this.memGenerator.generate();
