@@ -1,4 +1,4 @@
-export const architectureTypes = {
+export const regConfigs = {
     'one-addr': [
         {
             "group": "general",
@@ -21,4 +21,8 @@ export const architectureTypes = {
             ]
         }
     ]
+}
+
+export function regsConfigForArch(type) {
+    return regConfigs[type];
 }

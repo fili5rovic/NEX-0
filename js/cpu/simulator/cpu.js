@@ -1,11 +1,12 @@
 import {RegisterBank} from "../registers/register-bank.js";
 import {CpuDisplay} from "../ui/cpuDisplay.js"
-import {Architecture} from "../architecture/architecture.js";
+import {archFromString} from "../architecture/architecture.js";
 import {extractCode} from "./parser.js";
 import {ExecutorFactory} from "./executor/executorFactory.js";
 import {getCpuTypeForAttribute} from "../types/cpuTypes.js";
 import {initTitleButtonListener} from "../ui/cpuSidebar.js";
 import {System} from "../../system.js";
+import {regsConfigForArch} from "../architecture/regs/regConfigs.js";
 
 class CPU extends EventTarget {
     constructor(cpuElem) {
@@ -16,7 +17,7 @@ class CPU extends EventTarget {
         const cpuType = getCpuTypeForAttribute(cpuTypeAttr);
 
         this.archType = cpuType.arch;
-        this.architecture = Architecture.fromString(this.archType);
+        this.architecture = archFromString(this.archType);
         this.executionTime = cpuType.executionTime;
 
         this.editor = cpuElem.querySelector('[data-role="editor"]');
@@ -25,7 +26,7 @@ class CPU extends EventTarget {
         this.stepBtn = cpuElem.querySelector('[data-role="stepBtn"]');
 
 
-        this.registerBank = new RegisterBank(Architecture.regConfig(this.archType));
+        this.registerBank = new RegisterBank(regsConfigForArch(this.archType));
 
         this.display = new CpuDisplay(this);
         this.executor = ExecutorFactory.fromCPU(this);

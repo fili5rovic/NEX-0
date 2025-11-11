@@ -1,6 +1,6 @@
-import {Architecture} from "../architecture/architecture.js";
 import CPU from "../simulator/cpu.js";
 import {getCpuTypeForAttribute} from "../types/cpuTypes.js";
+import {regsConfigForArch} from "../architecture/regs/regConfigs.js";
 
 export class CpuGenerator {
     constructor() {
@@ -56,7 +56,7 @@ export class CpuGenerator {
 
     #makeRegTableHtmlString(cpuType) {
         const dataArch = cpuType.arch;
-        const regConfig = Architecture.regConfig(dataArch);
+        const regConfig = regsConfigForArch(dataArch);
 
         let rows = '';
 
