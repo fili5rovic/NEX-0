@@ -1,4 +1,4 @@
-import {DataLoader} from "../../util/dataLoader.js";
+import {architectureTypes} from "./types/architectureTypes.js";
 
 export class Architecture {
     constructor() {
@@ -22,7 +22,7 @@ export class Architecture {
     }
 
     static regConfig(name) {
-        return DataLoader.get(name);
+        return architectureTypes[name];
     }
 }
 

@@ -1,19 +1,23 @@
-# Register Bank JSON Format Specification
+# Register Bank Format Specification
 
-Dokumentacija formata JSON fajlova za definisanje registarskih banki u arhitekturi procesora.
+Dokumentacija formata za definisanje registarskih banki u arhitekturi procesora.
 
-## Lokacija fajlova
+## Lokacija
+
+Registarske banke se definišu u:
 ```
-/json/architecture/registers/example.json
+/src/architecture-types.js
 ```
+
+Kao deo `architectureTypes` objekta, gde ključ je tip arhitekture (npr. 'one-addr').
 
 ## Svrha
 
-JSON fajlovi definišu strukturu registarske banke koja se učitava u `RegisterBank` klasu i vezuje za konkretnu procesorsku arhitekturu.
+Definicije registarskih banki se učitavaju u `RegisterBank` klasu i vezuju za konkretnu procesorsku arhitekturu.
 
-## Struktura JSON fajla
+## Struktura
 
-JSON fajl sadrži niz grupa registara, где svaka grupa ima:
+Svaka arhitektura sadrži niz grupa registara, gde svaka grupa ima:
 
 - **`group`** - naziv grupe registara (npr. "general", "special")
 - **`registers`** - niz objekata koji predstavljaju pojedinačne registre
@@ -40,7 +44,7 @@ JSON fajl sadrži niz grupa registara, где svaka grupa ima:
 - **Tip:** number
 - **Default:** 1
 - **Opis:** Broj ćelija koje registar zauzima prilikom prikaza
-- **Napomena:** Utičе samo na vizuelni prikaz, nema funkcionalnu ulogu
+- **Napomena:** Utiče samo na vizuelni prikaz, nema funkcionalnu ulogu
 
 #### `radix` (opciono)
 - **Tip:** number
@@ -70,38 +74,40 @@ JSON fajl sadrži niz grupa registara, где svaka grupa ima:
 - **Opis:** Neupotrebljiv registar - vrednost se ne može ni čitati ni menjati
 
 ## Primer kompletne konfiguracije
-```json
-[
-  {
-    "group": "general",
-    "registers": [
-      {"name": "R0"},
-      {"name": "R1"},
-      {"name": "R2"},
-      {"name": "R3"},
-      {"name": "R4"},
-      {"name": "R5"},
-      {"name": "R6"},
-      {"name": "R7"}
+```javascript
+export const architectureTypes = {
+    'one-addr': [
+        {
+            "group": "general",
+            "registers": [
+                {"name": "R0"},
+                {"name": "R1"},
+                {"name": "R2"},
+                {"name": "R3"},
+                {"name": "R4"},
+                {"name": "R5"},
+                {"name": "R6"},
+                {"name": "R7"}
+            ]
+        },
+        {
+            "group": "special",
+            "registers": [
+                {
+                    "name": "ACC",
+                    "colspan": 4
+                },
+                {
+                    "name": "PSW",
+                    "displayName": "PSW<br>V C N Z",
+                    "colspan": 4,
+                    "radix": 2,
+                    "binaryWidth": 4
+                }
+            ]
+        }
     ]
-  },
-  {
-    "group": "special",
-    "registers": [
-      {
-        "name": "ACC",
-        "colspan": 4
-      },
-      {
-        "name": "PSW",
-        "displayName": "PSW<br>V C N Z",
-        "colspan": 4,
-        "radix": 2,
-        "binaryWidth": 4
-      }
-    ]
-  }
-]
+}
 ```
 
 ## Napomene
@@ -111,5 +117,5 @@ JSON fajl sadrži niz grupa registara, где svaka grupa ima:
 
 ---
 
-**Verzija dokumentacije:** 1.0  
+**Verzija dokumentacije:** 2.0  
 **Poslednje ažuriranje:** 2025

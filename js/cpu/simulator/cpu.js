@@ -92,10 +92,6 @@ class CPU extends EventTarget {
         this.dispatchEvent(new CustomEvent('reg-changed', {detail: {name,val}}));
     }
 
-    sendHalt() {
-        // ja ovde treba da kazem da nece vise biti instrukcija, to je todo
-    }
-
     stop() {
         this.dispatchEvent(new CustomEvent('cpu-stop', {}));
         this.executor.stop();
