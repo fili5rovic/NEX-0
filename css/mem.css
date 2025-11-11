@@ -5,39 +5,77 @@
     border: 2px solid rgb(34, 34, 34);
     border-radius: 15px;
     width: fit-content;
+    display: flex;
+    flex-direction: column;
 }
 
 .mem-header {
     text-align: center;
-    color: gray;
+    color: #d4d4d4;
     font-family: 'Courier New', monospace;
     font-size: 12px;
     font-weight: bold;
     padding: 6px;
-    background-color: #222222;
+    background: linear-gradient(180deg, #222222 0%, #252525 100%);
+    border: 1px solid #444;
     border-radius: 4px;
     margin-bottom: 8px;
     user-select: none;
 }
 
-.mem-table {
+.mem-container {
+    max-height: 450px;
+    max-width: 450px;
+    overflow: auto;
+    background: #222222;
     border: 1px solid #444;
+    border-radius: 4px;
+}
+
+.mem-container::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.mem-container::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 4px;
+}
+
+.mem-container::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+    border: 1px solid #333;
+}
+
+.mem-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.mem-container::-webkit-scrollbar-corner {
+    background: #1a1a1a;
+}
+
+.mem-table {
     table-layout: fixed;
     border-collapse: collapse;
     background: linear-gradient(180deg, #222222 0%, #252525 100%);
-    border-radius: 4px;
-    overflow: hidden;
 }
 
 .mem-cell {
     padding: 6px 10px;
     font-size: 12px;
     font-family: 'Courier New', monospace;
-    color: gray;
+    color: #666;
     text-align: center;
     user-select: none;
-    border-bottom: 1px solid #333;
+    border: 1px solid #333;
     background-color: #222222;
+    min-width: 40px;
+}
+
+.mem-cell:hover {
+    background-color: rgba(145, 145, 145, 0.07);
 }
 
 .mem-cell.changed {
@@ -46,7 +84,8 @@
 }
 
 .mem-cell.non-zero {
-    color:white;
+    color: #d4d4d4;
+    font-weight: bold;
 }
 
 @keyframes memHighlight {

@@ -32,10 +32,13 @@ export class MemoryGenerator {
 
     #generateInnerHtmlString(memElem) {
         const memSize = memElem.getAttribute('data-mem-size');
-        const rows = memSize.split('x').at(0);
-        const cols = memSize.split('x').at(1);
+        const [rows, cols] = memSize.split('x').map(Number);
 
-        const parts = [`<div class="mem-header">MEMORY ${rows * cols}B</div><table class="mem-table">`];
+        const parts = [
+            `<div class="mem-header">MEMORY ${rows * cols}B</div>`,
+            `<div class="mem-container">`,
+            `<table class="mem-table">`
+        ];
 
         for (let i = 0; i < rows; i++) {
             parts.push('\n\t<tr>');
@@ -48,6 +51,7 @@ export class MemoryGenerator {
         }
 
         parts.push('\n</table>');
+        parts.push('\n</div>');
 
         return parts.join('');
     }
