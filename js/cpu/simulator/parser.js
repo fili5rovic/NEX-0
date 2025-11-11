@@ -22,7 +22,7 @@ export function removeLabelsFromLine(line) {
     return line.replace(/^\w+:/,'');
 }
 
-export function isValidCodeLine(arch, line) {
+export function isValidCodeLine(line, cpu) {
     if(line.trim() === '')
         return true;
 
@@ -37,8 +37,20 @@ export function isValidCodeLine(arch, line) {
             return false;
     }
 
+    const parts = line.split(/\s+/);
+    const operation = parts[0];
+    const operands = parts.slice(1);
 
-    console.log(line);
+    const allowedOperations = [...cpu.architecture.operations].filter(
+        op => !cpu.invalidInstructions.includes(op)
+    );
+
+    console.log(operation)
+    console.log(allowedOperations)
+
+    if(!allowedOperations.includes(operation))
+        return false;
+
 
     return true;
 }

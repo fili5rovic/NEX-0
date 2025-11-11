@@ -18,6 +18,7 @@ class CPU extends EventTarget {
 
         this.archType = cpuType.arch;
         this.architecture = archFromString(this.archType);
+        this.invalidInstructions = cpuType.invalidInstructions;
         this.executionTime = cpuType.executionTime;
 
         this.stepping = false;
@@ -53,7 +54,7 @@ class CPU extends EventTarget {
         const errors = [];
 
         lines.forEach((line, index) => {
-            if (!isValidCodeLine(this.archType, line)) {
+            if (!isValidCodeLine(line, this)) {
                 errors.push(index);
             }
         });
@@ -70,6 +71,8 @@ class CPU extends EventTarget {
         if(!this.stepping) {
             this.display.editorHandler.lockEditor();
             if(!this.testCode()) {
+                this.runBtn.disabled = true;
+                this.stepBtn.disabled = true;
                 return;
             }
             this.stepping = true;
@@ -133,8 +136,6 @@ class CPU extends EventTarget {
         this.registerBank.set(name, val);
         this.dispatchEvent(new CustomEvent('reg-changed', {detail: {name, val}}));
     }
-
-
 
     getCpuElem() {
         return this.cpuElem;
