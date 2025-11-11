@@ -1,10 +1,11 @@
 const Architectures = {
     'one-addr': {
-        'keywords': [
+        'operations': [
             'add', 'sub', 'mul', 'div', 'mod',
             'load', 'store',
-            'neg', 'inc', 'dec', 'nop', 'halt',
-            'jmp', 'jz', 'jnz', 'jg', 'jge', 'jl', 'jle'
+            'neg', 'inc', 'dec',
+            'jmp', 'jz', 'jnz', 'jg', 'jge', 'jl', 'jle',
+            'nop', 'halt'
         ]
     }
 }

@@ -2,7 +2,7 @@ export const OPERATION_DESCRIPTIONS = {
     'add': 'Adds two numbers',
     'sub': 'Subtracts second number from first',
     'mul': 'Multiplies two numbers',
-    'div': 'Divides first number by second (integer division)',
+    'div': 'Divides first number by second',
     'mod': 'Computes remainder of division',
     'and': 'Bitwise AND of two numbers',
     'or':  'Bitwise OR of two numbers',
@@ -26,3 +26,7 @@ export const OPERATION_DESCRIPTIONS = {
     'jl':  'Jump if less (negative flag set)',
     'jle': 'Jump if less or equal (negative or zero flag set)',
 };
+
+export function descForString(operation) {
+    return OPERATION_DESCRIPTIONS[operation];
+}
