@@ -140,6 +140,13 @@ class CPU extends EventTarget {
     getCpuElem() {
         return this.cpuElem;
     }
+
+    get allowedOperations() {
+        return [...this.architecture.operations].filter(
+            op => !this.invalidInstructions.includes(op)
+        );
+    }
+
 }
 
 export default CPU;

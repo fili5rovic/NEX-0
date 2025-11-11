@@ -41,14 +41,7 @@ export function isValidCodeLine(line, cpu) {
     const operation = parts[0];
     const operands = parts.slice(1);
 
-    const allowedOperations = [...cpu.architecture.operations].filter(
-        op => !cpu.invalidInstructions.includes(op)
-    );
-
-    console.log(operation)
-    console.log(allowedOperations)
-
-    if(!allowedOperations.includes(operation))
+    if(!cpu.allowedOperations.includes(operation))
         return false;
 
 

@@ -2,7 +2,7 @@ export class EditorHandler {
     constructor(cpu) {
         const cpuElem = cpu.getCpuElem();
 
-        this.keywords = cpu.architecture.operations;
+        this.keywords = cpu.allowedOperations;
         this.editor = cpuElem.querySelector('[data-role="editor"]');
         this.highlightedCode = cpuElem.querySelector('[data-role="highlighted-code"]');
         this.highlightLayer = cpuElem.querySelector('[data-role="highlight-layer"]');
