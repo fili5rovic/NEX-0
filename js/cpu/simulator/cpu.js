@@ -5,7 +5,7 @@ import {extractCode} from "./parser.js";
 import {ExecutorFactory} from "./executor/executorFactory.js";
 import {getCpuTypeForAttribute} from "../types/cpuTypes.js";
 import {initTitleButtonListener} from "../ui/cpuSidebar.js";
-import {System} from "../../system.js";
+import {system} from "../../system.js";
 import {regsConfigForArch} from "../architecture/regs/regConfigs.js";
 
 class CPU extends EventTarget {
@@ -34,19 +34,20 @@ class CPU extends EventTarget {
 
     initButtonListeners() {
         this.runBtn.addEventListener('click', () => {
-            System.getInstance().runCpus();
+            system.runCpus();
         });
         this.stepBtn.addEventListener('click', () => {
-            System.getInstance().stepCpus();
+            system.stepCpus();
         });
         this.stopBtn.addEventListener('click', () => {
-            System.getInstance().stopCpus();
+            system.stopCpus();
         })
 
         initTitleButtonListener(this.cpuElem);
     }
 
     nextStep() {
+        this.display.editorHandler.lockEditor();
         const lines = this.getCodeLines();
         this.executor.runStep(lines);
     }
@@ -95,6 +96,7 @@ class CPU extends EventTarget {
 
     stop() {
         this.dispatchEvent(new CustomEvent('cpu-stop', {}));
+        this.display.editorHandler.unlockEditor();
         this.executor.stop();
         this.reset();
     }

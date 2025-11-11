@@ -1,5 +1,5 @@
 import {getLabelsMap, removeLabelsFromLine} from "../parser.js";
-import {System} from "../../../system.js";
+import {system} from "../../../system.js";
 
 export class Executor {
 
@@ -152,7 +152,7 @@ export class Executor {
 
             case Executor.OperandType.MEM_INDIRECT:
                 const addr = parseInt(operand.slice(1, -1));
-                return System.getInstance().sharedMemory.get(addr);
+                return system.sharedMemory.get(addr);
 
             case Executor.OperandType.MEM_DIRECT:
                 return parseInt(operand);
@@ -182,11 +182,11 @@ export class Executor {
             case 'regind':
                 const regName = operand.slice(1, -1);
                 const address = cpu.getReg(regName);
-                return System.getInstance().sharedMemory.get(address);
+                return system.sharedMemory.get(address);
 
             case 'memind':
                 const addr = operand.slice(1, -1);
-                return System.getInstance().sharedMemory.get(parseInt(addr));
+                return system.sharedMemory.get(parseInt(addr));
 
             case 'memdir':
                 return parseInt(operand);

@@ -1,5 +1,5 @@
 import {Executor} from "./executor.js";
-import {System} from "../../../system.js";
+import {system} from "../../../system.js";
 import {
     ARITHMETIC_OPERATIONS,
     JUMP_CONDITIONS,
@@ -75,7 +75,7 @@ export class OneAddrExecutor extends Executor {
             case 'load':
                 if (operandType === 'memdir' || operandType === 'memind' || operandType === 'regind') {
                     const addr = super.getAddressFromOperand(operand, cpu);
-                    cpu.setReg('acc', System.getInstance().sharedMemory.get(addr));
+                    cpu.setReg('acc', system.sharedMemory.get(addr));
                 } else {
                     cpu.setReg('acc', super.getValFromOperand(operand, cpu));
                 }
@@ -89,7 +89,7 @@ export class OneAddrExecutor extends Executor {
                     cpu.setReg(operand, accVal);
                 } else {
                     const addr = super.getAddressFromOperand(operand, cpu);
-                    System.getInstance().sharedMemory.set(addr, accVal);
+                    system.sharedMemory.set(addr, accVal);
                 }
                 break;
         }

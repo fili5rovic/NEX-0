@@ -1,3 +1,3 @@
-import {System} from "./system.js";
+import {system} from "./system.js";
 
-System.getInstance().generateHTML();
+system.generateHTML();
