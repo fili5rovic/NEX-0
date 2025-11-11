@@ -19,12 +19,12 @@ export const OPERATION_DESCRIPTIONS = {
     'halt': 'Stops CPU execution',
 
     'jmp': 'Unconditional jump',
-    'jz':  'Jump if zero flag is set',
-    'jnz': 'Jump if zero flag is not set',
-    'jg':  'Jump if greater (not zero and not negative)',
-    'jge': 'Jump if greater or equal (not negative)',
-    'jl':  'Jump if less (negative flag set)',
-    'jle': 'Jump if less or equal (negative or zero flag set)',
+    'jz':  'Jump if zero (PSW.Z = 1)',
+    'jnz': 'Jump if not zero (PSW.Z = 0)',
+    'jg':  'Jump if greater (PSW.Z = 0 and PSW.N = 0)',
+    'jge': 'Jump if greater or equal (PSW.N = 0)',
+    'jl':  'Jump if less (PSW.N = 1)',
+    'jle': 'Jump if less or equal (PSW.N = 1 or PSW.Z = 1)',
 };
 
 export function descForString(operation) {

@@ -121,15 +121,17 @@ export class CpuGenerator {
         }).join('');
 
         return `<div class="cpu-sidebar">
-                <h3>Specs</h3>
-                <table>
-                    <tr>
-                        <th>Instruction</th>
-                        <th>Description</th>
-                    </tr>
-                    ${operationRows}
-                </table>
-            </div>`;
+                    <div class="cpu-sidebar-content">
+                    <h3>Specs</h3>
+                    <table>
+                        <tr>
+                            <th>Instruction</th>
+                            <th>Description</th>
+                        </tr>
+                        ${operationRows}
+                    </table>
+                    </div>
+                </div>`;
     }
 
 

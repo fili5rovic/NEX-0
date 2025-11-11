@@ -189,38 +189,45 @@
 
 .cpu-sidebar {
     display: none;
-    width: 300px;
+    width: 350px;
     max-height: 500px;
-    overflow-y: auto;
-    overflow-x: hidden;
     background: linear-gradient(180deg, #222222 0%, #252525 100%);
     border: 1px solid #444;
     border-radius: 15px;
     padding: 10px;
     margin: auto;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
 }
 
-.cpu-sidebar::-webkit-scrollbar {
-    width: 8px;
+.cpu-sidebar-content {
+    max-height: 450px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
-.cpu-sidebar::-webkit-scrollbar-track {
-    background: #1a1a1a;
+.cpu-sidebar-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.cpu-sidebar-content::-webkit-scrollbar-track {
+    background: transparent;
     border-radius: 4px;
 }
 
-.cpu-sidebar::-webkit-scrollbar-thumb {
+.cpu-sidebar-content::-webkit-scrollbar-thumb {
     background: #444;
     border-radius: 4px;
     border: 1px solid #333;
 }
 
-.cpu-sidebar::-webkit-scrollbar-thumb:hover {
+.cpu-sidebar-content::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 
-.cpu-sidebar h3 {
+.cpu-sidebar-content h3 {
     font-family: 'Courier New', monospace;
     color: #d4d4d4;
     text-align: center;
@@ -231,13 +238,13 @@
     border-bottom: 1px solid #333;
 }
 
-.cpu-sidebar table {
+.cpu-sidebar-content table {
     width: 100%;
     border-collapse: collapse;
     font-family: 'Courier New', monospace;
 }
 
-.cpu-sidebar th {
+.cpu-sidebar-content th {
     color: #d4d4d4;
     font-weight: bold;
     padding: 8px;
@@ -247,28 +254,28 @@
     z-index: 1;
 }
 
-.cpu-sidebar td {
+.cpu-sidebar-content td {
     color: #999;
-    padding: 6px 8px;
+    padding: 6px 0;
     border-bottom: 1px solid #333;
     font-size: 13px;
 }
 
-.cpu-sidebar td:first-child {
+.cpu-sidebar-content td:first-child {
     color: #d4d4d4;
     font-weight: bold;
+    text-align: center;
+}
+
+.cpu-sidebar-content td:last-child {
     text-align: left;
 }
 
-.cpu-sidebar td:last-child {
-    text-align: left;
-}
-
-.cpu-sidebar tr:hover td {
+.cpu-sidebar-content tr:hover td {
     background-color: rgba(145, 145, 145, 0.07);
 }
 
-.cpu-sidebar hr {
+.cpu-sidebar-content hr {
     border: none;
     height: 1px;
     background-color: #333;
