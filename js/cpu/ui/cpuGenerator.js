@@ -45,7 +45,7 @@ export class CpuGenerator {
 
         const mainContent = [titleHtml, regTableHtml, editorHtml, controlHtml].join('');
         const mainDiv = `<div class="cpu-main-content">${mainContent}</div>`
-        const sideBar = this.#makeCpuInfoBarHtmlString(cpuElem);
+        const sideBar = this.#makeCpuSideBarHtmlString(cpuElem);
 
         return [mainDiv, sideBar].join('');
     }
@@ -104,13 +104,16 @@ export class CpuGenerator {
         </div>`;
     }
 
-    #makeCpuInfoBarHtmlString(cpuElem) {
+    #makeCpuSideBarHtmlString(cpuElem) {
         const cpuTypeAttr = cpuElem.getAttribute('data-cpu-type');
         const cpuType = getCpuTypeForAttribute(cpuTypeAttr);
 
         const arch = archFromString(cpuType.arch);
 
         const operationRows = arch.operations.map(op => {
+            if(cpuType.invalidInstructions.includes(op))
+                return '';
+
             const description = descForString(op) || 'No description available';
             return `
             <tr>

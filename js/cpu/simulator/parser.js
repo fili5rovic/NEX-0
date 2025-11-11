@@ -1,3 +1,5 @@
+import {ARITHMETIC_OPERATIONS, JUMP_CONDITIONS, UNARY_OPERATIONS} from "./executor/operations/commonOperations.js";
+
 export function extractCode(text) {
     let code = text.replace(/;.*$/gm, '');
     code = code.replace(/[ \t]+/g, ' ');
@@ -30,20 +32,50 @@ export function isValidCodeLine(line, cpu) {
     if(labelSplit.length > 2)
         return false;
     else if(labelSplit.length === 2) {
-        line = labelSplit[1];
         const labelName = labelSplit[0].slice(0, -1).trim();
         const validLabelName = /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(labelName);
         if(!validLabelName)
             return false;
+        line = labelSplit[1].trimStart();
     }
 
-    const parts = line.split(/\s+/);
-    const operation = parts[0];
-    const operands = parts.slice(1);
+    const firstSpace = line.indexOf(' ');
+    let operation, operands;
 
-    if(!cpu.allowedOperations.includes(operation))
+    if (firstSpace === -1) {
+        operation = line;
+        operands = [];
+    } else {
+        operation = line.slice(0, firstSpace);
+        const operandsStr = line.slice(firstSpace + 1).trim();
+        operands = operandsStr.split(/\s*,\s*/);
+    }
+
+    if (!cpu.allowedOperations.includes(operation))
         return false;
 
+    switch (cpu.archType) {
+        case 'one-addr':
+            if(!parseOneAddr(operation, operands))
+                return false;
+            break;
+    }
+    return true;
+}
 
+function parseOneAddr(operation, operands) {
+    if(operands.length === 0) {
+        if(!UNARY_OPERATIONS[operation])
+            return false;
+
+        if(ARITHMETIC_OPERATIONS[operation] || JUMP_CONDITIONS[operation])
+            return false;
+
+    } else if(operands.length === 1) {
+        if(UNARY_OPERATIONS[operation])
+            return false;
+    } else {
+        return false;
+    }
     return true;
 }
