@@ -83,6 +83,11 @@ export class EditorHandler {
         return text;
     }
 
+    clearErrors() {
+        this.errors = [];
+        this.updateHighlight();
+    }
+
     setErrors(errors) {
         this.errors = errors;
         this.updateHighlight();

@@ -20,11 +20,12 @@ class CPU extends EventTarget {
         this.architecture = archFromString(this.archType);
         this.executionTime = cpuType.executionTime;
 
+        this.stepping = false;
+
         this.editor = cpuElem.querySelector('[data-role="editor"]');
         this.runBtn = cpuElem.querySelector('[data-role="runBtn"]');
         this.stopBtn = cpuElem.querySelector('[data-role="stopBtn"]');
         this.stepBtn = cpuElem.querySelector('[data-role="stepBtn"]');
-
 
         this.registerBank = new RegisterBank(regsConfigForArch(this.archType));
 
@@ -34,8 +35,6 @@ class CPU extends EventTarget {
 
     initButtonListeners() {
         this.runBtn.addEventListener('click', () => {
-            if(!this.testCode())
-                return;
             system.runCpus();
         });
         this.stepBtn.addEventListener('click', () => {
@@ -66,8 +65,15 @@ class CPU extends EventTarget {
         return true;
     }
 
+
     nextStep() {
-        this.display.editorHandler.lockEditor();
+        if(!this.stepping) {
+            this.display.editorHandler.lockEditor();
+            if(!this.testCode()) {
+                return;
+            }
+            this.stepping = true;
+        }
         const lines = this.getCodeLines();
         this.executor.runStep(lines);
     }
@@ -78,8 +84,11 @@ class CPU extends EventTarget {
 
         this.runBtn.disabled = true;
         this.stepBtn.disabled = true;
+        this.display.editorHandler.lockEditor();
+        if(!this.testCode())
+            return;
+
         try {
-            this.display.editorHandler.lockEditor();
             await this.executor.runAll(lines);
         } catch (e) {
             console.warn('error:' + e)
@@ -88,6 +97,17 @@ class CPU extends EventTarget {
             this.stepBtn.disabled = false;
             this.display.editorHandler.unlockEditor();
         }
+    }
+
+    stop() {
+        this.stepping = false;
+
+        this.dispatchEvent(new CustomEvent('cpu-stop', {}));
+        this.runBtn.disabled = false;
+        this.stepBtn.disabled = false;
+        this.display.editorHandler.unlockEditor();
+        this.executor.stop();
+        this.reset();
     }
 
     getCodeLines() {
@@ -114,12 +134,7 @@ class CPU extends EventTarget {
         this.dispatchEvent(new CustomEvent('reg-changed', {detail: {name, val}}));
     }
 
-    stop() {
-        this.dispatchEvent(new CustomEvent('cpu-stop', {}));
-        this.display.editorHandler.unlockEditor();
-        this.executor.stop();
-        this.reset();
-    }
+
 
     getCpuElem() {
         return this.cpuElem;

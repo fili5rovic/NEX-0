@@ -23,6 +23,7 @@ export class CpuDisplay {
         this.cpu.addEventListener('cpu-stop', () => {
             this.clearPreviousChanged();
             this.highlightCurrentLine(null);
+            this.editorHandler.clearErrors();
         });
         this.cpu.addEventListener('cpu-highlight-clear', () => {
             this.clearPreviousChanged();
