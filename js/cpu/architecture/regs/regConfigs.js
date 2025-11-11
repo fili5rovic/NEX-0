@@ -29,10 +29,15 @@ export function regsConfigForArch(type) {
     return regConfigs[type];
 }
 
-export function regsAddressibleForArch(type) {
+export function regsAddressableForArch(type) {
     const config = regsConfigForArch(type);
     if(!config)
         return []
-
-
+    const ret = [];
+    config.forEach(c => {
+        if(c.directlyAddressable === "true") {
+            ret.push(...c.registers);
+        }
+    })
+    return ret;
 }

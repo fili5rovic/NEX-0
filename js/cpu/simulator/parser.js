@@ -1,4 +1,5 @@
 import {ARITHMETIC_OPERATIONS, JUMP_CONDITIONS, UNARY_OPERATIONS} from "./executor/operations/commonOperations.js";
+import {regsAddressableForArch} from "../architecture/regs/regConfigs.js";
 
 export function extractCode(text) {
     let code = text.replace(/;.*$/gm, '');
@@ -28,15 +29,19 @@ export function isValidCodeLine(line, cpu) {
     if(line.trim() === '')
         return true;
 
+    line = line.toLowerCase();
+
     const labelSplit = line.split(':');
     if(labelSplit.length > 2)
         return false;
     else if(labelSplit.length === 2) {
         const labelName = labelSplit[0].slice(0, -1).trim();
-        const validLabelName = /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(labelName);
+        const validLabelName = /^[a-z_][a-z0-9_]*$/.test(labelName);
         if(!validLabelName)
             return false;
         line = labelSplit[1].trimStart();
+        if(line === '')
+            return true;
     }
 
     const firstSpace = line.indexOf(' ');
@@ -54,6 +59,16 @@ export function isValidCodeLine(line, cpu) {
     if (!cpu.allowedOperations.includes(operation))
         return false;
 
+    const addressableOperands = regsAddressableForArch('one-addr');
+
+
+    const hasInvalidOperand = operands.some(op => {
+        const numRegex = /(#?\b\d+\b|0x[0-9A-Fa-f]+)/;
+        return !numRegex.test(op) && !addressableOperands.includes(op.toUpperCase());
+    });
+
+    if (hasInvalidOperand && !JUMP_CONDITIONS[operation]) return false;
+
     switch (cpu.archType) {
         case 'one-addr':
             if(!parseOneAddr(operation, operands))
@@ -64,16 +79,23 @@ export function isValidCodeLine(line, cpu) {
 }
 
 function parseOneAddr(operation, operands) {
-    if(operands.length === 0) {
-        if(!UNARY_OPERATIONS[operation])
+    if(operation === 'store') {
+        if(operands.length !== 1)
             return false;
+        if(operands[0].startsWith('#'))
+            return false;
+    }
+    if(operation === 'load' && operands.length !== 1)
+        return false;
 
-        if(ARITHMETIC_OPERATIONS[operation] || JUMP_CONDITIONS[operation])
+    if(operands.length === 0) {
+        if(!UNARY_OPERATIONS[operation] || ARITHMETIC_OPERATIONS[operation] || JUMP_CONDITIONS[operation])
             return false;
 
     } else if(operands.length === 1) {
         if(UNARY_OPERATIONS[operation])
             return false;
+
     } else {
         return false;
     }
