@@ -2,6 +2,7 @@ export const regConfigs = {
     'one-addr': [
         {
             "group": "general",
+            "directly-addressable": "true",
             "registers": [
                 {"name": "R0"},
                 {"name": "R1"},
@@ -15,6 +16,7 @@ export const regConfigs = {
         },
         {
             "group": "special",
+            "directly-addressable": "false",
             "registers": [
                 {"name": "ACC", "colspan": 4},
                 {"name": "PSW", "colspan": 4, "displayName": "PSW<br>V C N Z", "radix": 2, "binaryWidth": 4}

@@ -8,6 +8,7 @@ export class EditorHandler {
         this.highlightLayer = cpuElem.querySelector('[data-role="highlight-layer"]');
 
         this.currentLineIndex = null;
+        this.errors = []
 
         this.editor.addEventListener('input', this.handleInput);
         this.editor.addEventListener('keydown', this.handleKeyDown);
@@ -52,6 +53,10 @@ export class EditorHandler {
                 return `<span class="current-line">${highlightedLine}</span>`;
             }
 
+            if(this.errors.includes(index) ) {
+                return `<span class="error-line">${highlightedLine}</span>`;
+            }
+
             return highlightedLine;
         });
 
@@ -76,6 +81,11 @@ export class EditorHandler {
             '$1 <span class="label-call">$2</span>'
         );
         return text;
+    }
+
+    setErrors(errors) {
+        this.errors = errors;
+        this.updateHighlight();
     }
 
     setCurrentLine(lineNumber) {

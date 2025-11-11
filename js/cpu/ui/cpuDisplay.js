@@ -29,6 +29,10 @@ export class CpuDisplay {
             this.highlightCurrentLine(null);
         });
 
+        this.cpu.addEventListener('cpu-errors', e => {
+            this.editorHandler.setErrors(e.detail.errors);
+        });
+
         this.cpu.addEventListener('reg-changed', (e) => {
             this.updateRegister(e.detail.name);
         });

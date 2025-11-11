@@ -33,13 +33,11 @@
 }
 
 .mem-container::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 4px;
 }
 
 .mem-container::-webkit-scrollbar-track {
-    background: #1a1a1a;
-    border-radius: 4px;
+    background: #2a2a2a;
 }
 
 .mem-container::-webkit-scrollbar-thumb {

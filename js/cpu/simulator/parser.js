@@ -21,3 +21,24 @@ export function getLabelsMap(lines) {
 export function removeLabelsFromLine(line) {
     return line.replace(/^\w+:/,'');
 }
+
+export function isValidCodeLine(arch, line) {
+    if(line.trim() === '')
+        return true;
+
+    const labelSplit = line.split(':');
+    if(labelSplit.length > 2)
+        return false;
+    else if(labelSplit.length === 2) {
+        line = labelSplit[1];
+        const labelName = labelSplit[0].slice(0, -1).trim();
+        const validLabelName = /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(labelName);
+        if(!validLabelName)
+            return false;
+    }
+
+
+    console.log(line);
+
+    return true;
+}

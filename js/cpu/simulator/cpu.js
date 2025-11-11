@@ -1,7 +1,7 @@
 import {RegisterBank} from "../registers/register-bank.js";
 import {CpuDisplay} from "../ui/cpuDisplay.js"
 import {archFromString} from "../architecture/architecture.js";
-import {extractCode} from "./parser.js";
+import {extractCode, isValidCodeLine} from "./parser.js";
 import {ExecutorFactory} from "./executor/executorFactory.js";
 import {getCpuTypeForAttribute} from "../types/cpuTypes.js";
 import {initTitleButtonListener} from "../ui/cpuSidebar.js";
@@ -34,6 +34,8 @@ class CPU extends EventTarget {
 
     initButtonListeners() {
         this.runBtn.addEventListener('click', () => {
+            if(!this.testCode())
+                return;
             system.runCpus();
         });
         this.stepBtn.addEventListener('click', () => {
@@ -44,6 +46,24 @@ class CPU extends EventTarget {
         })
 
         initTitleButtonListener(this.cpuElem);
+    }
+
+    // in the future, this can generate actual code in memory when compiling
+    testCode() {
+        const lines = this.getCodeLines();
+        const errors = [];
+
+        lines.forEach((line, index) => {
+            if (!isValidCodeLine(this.archType, line)) {
+                errors.push(index);
+            }
+        });
+
+        if (errors.length > 0) {
+            this.dispatchEvent(new CustomEvent('cpu-errors', { detail: { errors } }));
+            return false;
+        }
+        return true;
     }
 
     nextStep() {
@@ -61,7 +81,7 @@ class CPU extends EventTarget {
         try {
             this.display.editorHandler.lockEditor();
             await this.executor.runAll(lines);
-        } catch(e) {
+        } catch (e) {
             console.warn('error:' + e)
         } finally {
             this.runBtn.disabled = false;
@@ -91,7 +111,7 @@ class CPU extends EventTarget {
 
     setReg(name, val) {
         this.registerBank.set(name, val);
-        this.dispatchEvent(new CustomEvent('reg-changed', {detail: {name,val}}));
+        this.dispatchEvent(new CustomEvent('reg-changed', {detail: {name, val}}));
     }
 
     stop() {

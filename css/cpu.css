@@ -154,6 +154,16 @@
     box-sizing: border-box;
 }
 
+.error-line {
+    display: inline-block;
+    width: 100%;
+    border-left: 2px solid #d13434;
+    background-color: rgba(147, 10, 10, 0.12);
+    transition: all 0.2s ease;
+    padding-left: 4px;
+    box-sizing: border-box;
+}
+
 .cpu-button {
     background: linear-gradient(180deg, #3a3a3a 0%, #2d2d2d 100%);
     border: 1px solid #555;
@@ -228,7 +238,6 @@
 }
 
 .cpu-sidebar-content h3 {
-    font-family: 'Courier New', monospace;
     color: #d4d4d4;
     text-align: center;
     font-size: 16px;
