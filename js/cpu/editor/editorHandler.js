@@ -10,6 +10,10 @@ export class EditorHandler {
         this.currentLineIndex = null;
         this.errors = []
 
+        this.alwaysLocked = cpuElem.hasAttribute('data-locked');
+        if(this.alwaysLocked)
+            this.lockEditor();
+
         this.editor.addEventListener('input', this.handleInput);
         this.editor.addEventListener('keydown', this.handleKeyDown);
         this.editor.addEventListener('scroll', this.handleScroll);
@@ -112,6 +116,7 @@ export class EditorHandler {
     }
 
     lockEditor() {
+
         this.editor.readOnly = true;
         this.editor.classList.add('editor-locked');
         this.highlightLayer.classList.add('editor-locked');
@@ -119,6 +124,8 @@ export class EditorHandler {
     }
 
     unlockEditor() {
+        if(this.alwaysLocked)
+            return;
         this.editor.readOnly = false;
         this.editor.classList.remove('editor-locked');
         this.highlightLayer.classList.remove('editor-locked');
