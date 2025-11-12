@@ -12,7 +12,7 @@ export function getLabelsMap(lines) {
     const map = new Map();
 
     for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
+        const line = lines[i].toLowerCase();
         if (/^\w+:.*$/.test(line)) {
             map.set(line.split(':')[0], i);
         }

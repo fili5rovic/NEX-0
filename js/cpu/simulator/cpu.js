@@ -7,6 +7,7 @@ import {getCpuTypeForAttribute} from "../types/cpuTypes.js";
 import {initTitleButtonListener} from "../ui/cpuSidebar.js";
 import {system} from "../../system.js";
 import {regsConfigForArch} from "../architecture/regs/regConfigs.js";
+import {getProgram} from "../editor/programs/programs.js";
 
 class CPU extends EventTarget {
     constructor(cpuElem) {
@@ -32,6 +33,17 @@ class CPU extends EventTarget {
 
         this.display = new CpuDisplay(this);
         this.executor = ExecutorFactory.fromCPU(this);
+
+        const programAttr = cpuElem.getAttribute('data-program');
+        if(programAttr) {
+            const programCode = getProgram(programAttr);
+            if(programCode) {
+                this.editor.innerHTML = getProgram(programAttr);
+                this.display.editorHandler.updateHighlight();
+            }
+
+        }
+
     }
 
     initButtonListeners() {
