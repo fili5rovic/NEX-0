@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "id": "level-001",
+  "title": "Educational simulator for multiprocessor systems",
+  "description": "Run multiple CPUs simultaneously, visualize parallel execution, and explore how processors share memory and coordinate tasks.",
+  "UNUSED_difficulty": "beginner",
+
+  "memory": [
+    {
+      "size": "32x8",
+      "initialState": {
+        "0x100": 0,
+        "0x101": 0
+      }
+    }
+  ],
+
+  "cpus": [
+    {
+      "id": "cpu1",
+      "type": "cpu1",
+      "invalidInstructions": ["MUL", "DIV"],
+      "dataProgram": "test",
+      "locked": true
+    },
+    {
+      "id": "cpu2",
+      "type": "cpu1"
+    }
+  ],
+
+  "initialPrograms": [
+    {
+      "name": "test",
+      "code": "LOAD #5\nLOOP: DEC\nJNZ LOOP"
+    }
+  ],
+
+  "objectives": [
+    {
+      "type": "memory_value",
+      "address": "0x100",
+      "expectedValue": 42
+    }
+  ],
+
+  "hints": [
+    "test hint"
+  ],
+
+  "validation": {
+    "checkMemory": true,
+    "checkCode": false,
+    "maxInstructions": 10
+  }
+}
