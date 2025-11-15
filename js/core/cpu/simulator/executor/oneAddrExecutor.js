@@ -1,5 +1,5 @@
 import {Executor} from "./executor.js";
-import {system} from "../../../system.js";
+import {system} from "../../../../system.js";
 import {
     ARITHMETIC_OPERATIONS,
     JUMP_CONDITIONS,

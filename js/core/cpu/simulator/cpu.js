@@ -5,7 +5,7 @@ import {extractCode, isValidCodeLine} from "./parser.js";
 import {ExecutorFactory} from "./executor/executorFactory.js";
 import {getCpuTypeForAttribute} from "../types/cpuTypes.js";
 import {initTitleButtonListener} from "../ui/cpuSidebar.js";
-import {system} from "../../system.js";
+import {system} from "../../../system.js";
 import {regsConfigForArch} from "../architecture/regs/regConfigs.js";
 import {getProgram} from "../editor/programs/programs.js";
 

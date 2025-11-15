@@ -1,5 +1,5 @@
-import {MemoryGenerator} from "./memory/ui/memoryGenerator.js";
-import {CpuGenerator} from "./cpu/ui/cpuGenerator.js";
+import {MemoryGenerator} from "./core/memory/ui/memoryGenerator.js";
+import {CpuGenerator} from "./core/cpu/ui/cpuGenerator.js";
 
 class SystemManager {
     constructor() {
@@ -18,7 +18,7 @@ class SystemManager {
         })
 
         await Promise.all(cpuPromises)
-
+// TODO ako napisem recimo nevalidnu liniju i runujem, ostace crvena dok se ne klikne stop
         this.cpuGenerator.cpuMap.forEach(cpu => {
             cpu.cleanup();
         });

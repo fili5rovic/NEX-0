@@ -1,4 +1,4 @@
-export const CpuTypes = {
+const CpuTypes = {
     'cpu1': {
         displayName: 'Intel 4004',
         arch: 'one-addr',
