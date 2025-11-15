@@ -7,8 +7,19 @@ class SystemManager {
         this.memGenerator = new MemoryGenerator();
     }
 
-    runCpus() {
-        this.cpuGenerator.cpuMap.forEach(cpu => cpu.executeAll());
+    async runCpus() {
+        const cpuPromises = []
+
+        this.cpuGenerator.cpuMap.forEach(cpu => {
+            const promise = cpu.executeAll()
+            cpuPromises.push(promise)
+        })
+
+        await Promise.all(cpuPromises)
+
+        this.cpuGenerator.cpuMap.forEach(cpu => {
+            cpu.cleanup();
+        });
     }
 
     stepCpus() {

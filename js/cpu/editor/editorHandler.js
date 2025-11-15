@@ -121,6 +121,7 @@ export class EditorHandler {
         this.editor.classList.add('editor-locked');
         this.highlightLayer.classList.add('editor-locked');
         this.editor.blur();
+        window.getSelection()?.removeAllRanges();
     }
 
     unlockEditor() {

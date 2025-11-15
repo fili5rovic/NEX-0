@@ -107,10 +107,6 @@ class CPU extends EventTarget {
             await this.executor.runAll(lines);
         } catch (e) {
             console.warn('error:' + e)
-        } finally {
-            this.runBtn.disabled = false;
-            this.stepBtn.disabled = false;
-            this.display.editorHandler.unlockEditor();
         }
     }
 
@@ -123,6 +119,12 @@ class CPU extends EventTarget {
         this.display.editorHandler.unlockEditor();
         this.executor.stop();
         this.reset();
+    }
+
+    cleanup() {
+        this.runBtn.disabled = false;
+        this.stepBtn.disabled = false;
+        this.display.editorHandler.unlockEditor();
     }
 
     getCodeLines() {
