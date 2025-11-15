@@ -1,7 +1,5 @@
 export class Memory {
     constructor(memElem) {
-        this.memElem = memElem;
-
         const memSize = memElem.getAttribute('data-mem-size') || '16x16';
         const [rows, cols] = memSize.split('x').map(Number);
         if (isNaN(rows) || isNaN(cols)) {
@@ -56,5 +54,11 @@ export class Memory {
             throw new RangeError(`Memory read out of bounds: ${index} (size: ${this.size})`);
         }
         return this.values[index];
+    }
+
+    reset() {
+        this.values.fill(0);
+        this.previousValues.fill(0);
+        this.updateDisplayAll(false);
     }
 }

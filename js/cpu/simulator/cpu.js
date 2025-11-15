@@ -88,6 +88,7 @@ class CPU extends EventTarget {
                 return;
             }
             this.stepping = true;
+            system.memReset();
         }
         const lines = this.getCodeLines();
         this.executor.runStep(lines);

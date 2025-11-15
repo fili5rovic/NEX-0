@@ -8,6 +8,8 @@ class SystemManager {
     }
 
     async runCpus() {
+        this.memReset();
+
         const cpuPromises = []
 
         this.cpuGenerator.cpuMap.forEach(cpu => {
@@ -28,6 +30,10 @@ class SystemManager {
 
     stopCpus() {
         this.cpuGenerator.cpuMap.forEach(cpu => cpu.stop());
+    }
+
+    memReset() {
+        this.memGenerator.sharedMemory.reset();
     }
 
     generateHTML() {
