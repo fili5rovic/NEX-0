@@ -36,7 +36,7 @@ export function regsAddressableForArch(type) {
     const ret = [];
     config.forEach(c => {
         if(c.directlyAddressable === "true") {
-            ret.push(...c.registers);
+            ret.push(...c.registers.map(reg => reg.name));
         }
     })
     return ret;

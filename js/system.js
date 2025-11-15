@@ -18,9 +18,10 @@ class SystemManager {
         })
 
         await Promise.all(cpuPromises)
-// TODO ako napisem recimo nevalidnu liniju i runujem, ostace crvena dok se ne klikne stop
         this.cpuGenerator.cpuMap.forEach(cpu => {
-            cpu.cleanup();
+            if(!cpu.hasCompileErrors) {
+                cpu.cleanup();
+            }
         });
     }
 

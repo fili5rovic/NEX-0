@@ -31,7 +31,10 @@ export class CpuDisplay {
         });
 
         this.cpu.addEventListener('cpu-errors', e => {
-            this.editorHandler.setErrors(e.detail.errors);
+            this.editorHandler.setErrors(e.detail.errors.map(error => error.index));
+            for(const error of e.detail.errors) {
+                console.log(`Line: ${error.index} : ${error.error}`)
+            }
         });
 
         this.cpu.addEventListener('reg-changed', (e) => {

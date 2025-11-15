@@ -23,6 +23,7 @@ class CPU extends EventTarget {
         this.executionTime = cpuType.executionTime;
 
         this.stepping = false;
+        this.hasCompileErrors = false;
 
         this.editor = cpuElem.querySelector('[data-role="editor"]');
         this.runBtn = cpuElem.querySelector('[data-role="runBtn"]');
@@ -35,9 +36,9 @@ class CPU extends EventTarget {
         this.executor = ExecutorFactory.fromCPU(this);
 
         const programAttr = cpuElem.getAttribute('data-program');
-        if(programAttr) {
+        if (programAttr) {
             const programCode = getProgram(programAttr);
-            if(programCode) {
+            if (programCode) {
                 this.editor.innerHTML = getProgram(programAttr);
                 this.display.editorHandler.updateHighlight();
             }
@@ -66,23 +67,27 @@ class CPU extends EventTarget {
         const errors = [];
 
         lines.forEach((line, index) => {
-            if (!isValidCodeLine(line, this)) {
-                errors.push(index);
+            const result = isValidCodeLine(line, this);
+            if (!result.valid) {
+                const error = result.error;
+                errors.push({"index": index, "error": error});
             }
         });
 
         if (errors.length > 0) {
-            this.dispatchEvent(new CustomEvent('cpu-errors', { detail: { errors } }));
+            this.hasCompileErrors = true;
+            this.dispatchEvent(new CustomEvent('cpu-errors', {detail: {errors}}));
             return false;
         }
+        this.hasCompileErrors = false;
         return true;
     }
 
 
     nextStep() {
-        if(!this.stepping) {
+        if (!this.stepping) {
             this.display.editorHandler.lockEditor();
-            if(!this.testCode()) {
+            if (!this.testCode()) {
                 this.runBtn.disabled = true;
                 this.stepBtn.disabled = true;
                 return;
@@ -101,7 +106,7 @@ class CPU extends EventTarget {
         this.runBtn.disabled = true;
         this.stepBtn.disabled = true;
         this.display.editorHandler.lockEditor();
-        if(!this.testCode())
+        if (!this.testCode())
             return;
 
         try {
@@ -113,6 +118,7 @@ class CPU extends EventTarget {
 
     stop() {
         this.stepping = false;
+        this.hasCompileErrors = false;
 
         this.dispatchEvent(new CustomEvent('cpu-stop', {}));
         this.runBtn.disabled = false;
