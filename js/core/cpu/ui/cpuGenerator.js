@@ -111,7 +111,7 @@ export class CpuGenerator {
         const arch = archFromString(cpuType.arch);
 
         const operationRows = arch.operations.map(op => {
-            if(cpuType.invalidInstructions.includes(op))
+            if(cpuType.invalidInstructions && cpuType.invalidInstructions.includes(op))
                 return '';
 
             const description = descForString(op) || 'No description available';

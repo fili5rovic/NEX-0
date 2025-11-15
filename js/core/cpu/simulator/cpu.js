@@ -19,7 +19,7 @@ class CPU extends EventTarget {
 
         this.archType = cpuType.arch;
         this.architecture = archFromString(this.archType);
-        this.invalidInstructions = cpuType.invalidInstructions;
+        this.invalidInstructions = cpuType.invalidInstructions || [];
         this.executionTime = cpuType.executionTime;
 
         this.stepping = false;
