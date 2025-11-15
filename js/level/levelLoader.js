@@ -1,6 +1,7 @@
 import {addInitialPrograms} from "../core/cpu/editor/programs/programs.js";
 import {addCpuTypes} from "../core/cpu/types/cpuTypes.js";
 import {addMemoryStates} from "../core/memory/memoryStates.js";
+import {setLevelData} from "./levelCompleteCheck.js";
 
 export async function loadLevel(name) {
     const levelContainer = document.getElementById('level-container');
@@ -15,6 +16,7 @@ export async function loadLevel(name) {
         addInitialPrograms(data.initialPrograms);
         addCpuTypes(data.newCpuTypes);
         addMemoryStates(data.memoryStates);
+        setLevelData(data);
         levelContainer.innerHTML = generateHtmlFromData(data);
     }
 }
@@ -41,9 +43,10 @@ function generateHtmlFromData(data) {
 
     let memHtml = '';
     for(let mem of data.memory) {
+        const idAttr = mem.id ? `id=${mem.id}`: ''
         const memSizeAttr = `data-mem-size="${mem.size}"`;
         const initialStateAttr = mem.initialState ? `data-mem-initial-state=${mem.initialState}`: '';
-        memHtml += `<div class="mem" ${memSizeAttr} ${initialStateAttr}></div>`
+        memHtml += `<div ${idAttr} class="mem" ${memSizeAttr} ${initialStateAttr}></div>`
     }
 
     return `<h3>${data.title}</h3>

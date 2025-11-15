@@ -7,6 +7,7 @@ export class Memory {
         if (isNaN(rows) || isNaN(cols)) {
             throw new Error(`Invalid memory size: ${memSize}`);
         }
+        this.id = memElem.getAttribute(`id`);
         this.size = rows * cols;
         this.values = new Uint8Array(this.size);
         this.previousValues = new Uint8Array(this.size);

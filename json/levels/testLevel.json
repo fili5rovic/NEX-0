@@ -6,6 +6,7 @@
   "UNUSED_difficulty": "beginner",
   "memory": [
     {
+      "id" : "mem_shared",
       "size": "32x8",
       "initialState": "initial1"
     }
@@ -50,19 +51,12 @@
       "code": "LOAD #5\nLOOP: DEC\nJNZ LOOP"
     }
   ],
-  "UNUSED_objectives": [
+  "completionConditions": [
     {
       "type": "memory_value",
-      "address": "0x100",
-      "expectedValue": 42
+      "targetId" : "mem_shared",
+      "address": "5",
+      "expectedValue": 5
     }
-  ],
-  "UNUSED_hints": [
-    "test hint"
-  ],
-  "UNUSED_validation": {
-    "checkMemory": true,
-    "checkCode": false,
-    "maxInstructions": 10
-  }
+  ]
 }

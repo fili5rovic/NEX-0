@@ -1,5 +1,6 @@
 import {MemoryGenerator} from "./core/memory/ui/memoryGenerator.js";
 import {CpuGenerator} from "./core/cpu/ui/cpuGenerator.js";
+import {checkLevelCompletion} from "./level/levelCompleteCheck.js";
 
 class SystemManager {
     constructor() {
@@ -18,11 +19,19 @@ class SystemManager {
         })
 
         await Promise.all(cpuPromises)
+
+        let systemHasCompileErrors = false;
         this.cpuGenerator.cpuMap.forEach(cpu => {
             if(!cpu.hasCompileErrors) {
                 cpu.cleanup();
+            } else {
+                systemHasCompileErrors = true;
             }
         });
+
+        if(!systemHasCompileErrors) {
+            checkLevelCompletion();
+        }
     }
 
     stepCpus() {
