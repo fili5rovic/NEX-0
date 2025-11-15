@@ -4,22 +4,16 @@
   "title": "Educational simulator for multiprocessor systems",
   "description": "Run multiple CPUs simultaneously, visualize parallel execution, and explore how processors share memory and coordinate tasks.",
   "UNUSED_difficulty": "beginner",
-
   "memory": [
     {
       "size": "32x8",
-      "initialState": {
-        "3": 2,
-        "4": 1
-      }
+      "initialState": "initial1"
     }
   ],
-
   "cpus": [
     {
       "id": "cpu1",
       "type": "cpu1",
-      "invalidInstructions": ["MUL", "DIV"],
       "dataProgram": "test",
       "locked": true
     },
@@ -28,27 +22,45 @@
       "type": "cpu1"
     }
   ],
-
+  "memoryStates": {
+    "initial1": {
+      "3": 4,
+      "5": 2
+    }
+  },
+  "newCpuTypes": {
+    "cpu1": {
+      "displayName": "Intel 4004",
+      "arch": "one-addr",
+      "invalidInstructions": [
+        "sub",
+        "add"
+      ],
+      "executionTime": 300
+    },
+    "cpu2": {
+      "displayName": "test",
+      "arch": "one-addr",
+      "executionTime": 300
+    }
+  },
   "initialPrograms": [
     {
       "name": "test",
       "code": "LOAD #5\nLOOP: DEC\nJNZ LOOP"
     }
   ],
-
-  "objectives": [
+  "UNUSED_objectives": [
     {
       "type": "memory_value",
       "address": "0x100",
       "expectedValue": 42
     }
   ],
-
-  "hints": [
+  "UNUSED_hints": [
     "test hint"
   ],
-
-  "validation": {
+  "UNUSED_validation": {
     "checkMemory": true,
     "checkCode": false,
     "maxInstructions": 10

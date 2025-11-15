@@ -1,3 +1,5 @@
+import {getMemoryState} from "./memoryStates.js";
+
 export class Memory {
     constructor(memElem) {
         const memSize = memElem.getAttribute('data-mem-size') || '16x16';
@@ -8,6 +10,22 @@ export class Memory {
         this.size = rows * cols;
         this.values = new Uint8Array(this.size);
         this.previousValues = new Uint8Array(this.size);
+
+        const initialStateName = memElem.getAttribute('data-mem-initial-state');
+        const initialState = getMemoryState(initialStateName);
+
+        if(initialState) {
+            for (const [address, value] of Object.entries(initialState)) {
+                const index = Number(address);
+                const num = Number(value);
+                if(index < 0 || index > this.size)
+                    continue;
+                this.values[index] = num;
+                this.previousValues[index] = num;
+            }
+        }
+
+        this.initialValues = Uint8Array.from(this.values);
 
         this.boxes = Array.from(memElem.querySelectorAll('td'));
 
@@ -57,8 +75,8 @@ export class Memory {
     }
 
     reset() {
-        this.values.fill(0);
-        this.previousValues.fill(0);
+        this.values = Uint8Array.from(this.initialValues);
+        this.previousValues = Uint8Array.from(this.initialValues);
         this.updateDisplayAll(false);
     }
 }

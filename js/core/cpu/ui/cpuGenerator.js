@@ -1,8 +1,8 @@
-import CPU from "../simulator/cpu.js";
+import CPU from "../cpu.js";
 import {getCpuTypeForAttribute} from "../types/cpuTypes.js";
 import {regsConfigForArch} from "../architecture/regs/regConfigs.js";
 import {archFromString} from "../architecture/architecture.js";
-import {descForString} from "../simulator/executor/operations/operationDescriptions.js";
+import {descForString} from "../executor/operations/operationDescriptions.js";
 
 export class CpuGenerator {
     constructor() {

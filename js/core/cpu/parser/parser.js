@@ -1,4 +1,4 @@
-import {ARITHMETIC_OPERATIONS, JUMP_CONDITIONS, UNARY_OPERATIONS} from "./executor/operations/commonOperations.js";
+import {ARITHMETIC_OPERATIONS, JUMP_CONDITIONS, UNARY_OPERATIONS} from "../executor/operations/commonOperations.js";
 import {regsAddressableForArch} from "../architecture/regs/regConfigs.js";
 
 export function extractCode(text) {

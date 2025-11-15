@@ -1,14 +1,9 @@
-const CpuTypes = {
-    'cpu1': {
-        displayName: 'Intel 4004',
-        arch: 'one-addr',
-        invalidInstructions: ['sub'],
-        executionTime: 300
-    },
-    'cpu2': {
-        displayName: 'test',
-        arch: 'one-addr',
-        executionTime: 100
+const CpuTypes = {}
+
+export function addCpuTypes(types) {
+    const keys = Object.keys(types)
+    for(const key of keys) {
+        CpuTypes[key] = types[key];
     }
 }
 

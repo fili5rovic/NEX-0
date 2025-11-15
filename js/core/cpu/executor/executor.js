@@ -1,5 +1,5 @@
-import {getLabelsMap, removeLabelsFromLine} from "../parser.js";
-import {system} from "../../../../system.js";
+import {getLabelsMap, removeLabelsFromLine} from "../parser/parser.js";
+import {system} from "../../../system.js";
 
 export class Executor {
 

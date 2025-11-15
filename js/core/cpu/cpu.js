@@ -1,13 +1,13 @@
-import {RegisterBank} from "../registers/register-bank.js";
-import {CpuDisplay} from "../ui/cpuDisplay.js"
-import {archFromString} from "../architecture/architecture.js";
-import {extractCode, isValidCodeLine} from "./parser.js";
+import {RegisterBank} from "./registers/register-bank.js";
+import {CpuDisplay} from "./ui/cpuDisplay.js"
+import {archFromString} from "./architecture/architecture.js";
+import {extractCode, isValidCodeLine} from "./parser/parser.js";
 import {ExecutorFactory} from "./executor/executorFactory.js";
-import {getCpuTypeForAttribute} from "../types/cpuTypes.js";
-import {initTitleButtonListener} from "../ui/cpuSidebar.js";
-import {system} from "../../../system.js";
-import {regsConfigForArch} from "../architecture/regs/regConfigs.js";
-import {getProgram} from "../editor/programs/programs.js";
+import {getCpuTypeForAttribute} from "./types/cpuTypes.js";
+import {initTitleButtonListener} from "./ui/cpuSidebar.js";
+import {system} from "../../system.js";
+import {regsConfigForArch} from "./architecture/regs/regConfigs.js";
+import {getProgram} from "./editor/programs/programs.js";
 
 class CPU extends EventTarget {
     constructor(cpuElem) {
