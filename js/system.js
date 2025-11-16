@@ -30,7 +30,8 @@ class SystemManager {
         });
 
         if(!systemHasCompileErrors) {
-            checkLevelCompletion();
+            const completed = checkLevelCompletion();
+            console.log(completed);
         }
     }
 

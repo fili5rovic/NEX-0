@@ -55,7 +55,13 @@
     {
       "type": "memory_value",
       "targetId" : "mem_shared",
-      "address": "5",
+      "location": "5",
+      "expectedValue": 5
+    },
+    {
+      "type": "register_value",
+      "targetId" : "cpu1",
+      "location": "ACC",
       "expectedValue": 5
     }
   ]
