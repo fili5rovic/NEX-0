@@ -2,7 +2,7 @@
 
 ## Overview
 
-Level configuration files define the structure and behavior of CPU simulator levels. They are JSON files that specify memory layout, CPU configurations, initial states, and available programs.
+Level configuration files define the structure and behavior of CPU simulator levels. They are JSON files that specify memory layout, CPU configurations, initial states, available programs, and completion conditions.
 
 ## File Structure
 ```json
@@ -15,7 +15,8 @@ Level configuration files define the structure and behavior of CPU simulator lev
   "cpus": [],
   "memoryStates": {},
   "newCpuTypes": {},
-  "initialPrograms": []
+  "initialPrograms": [],
+  "completionConditions": []
 }
 ```
 
@@ -28,7 +29,7 @@ Configuration file format version. Currently only version `1` is supported.
 Unique identifier for the level. Should follow the pattern `level-XXX` where XXX is a zero-padded number.<br>
 If you are making custom levels, they should follow pattern `{your_unique_identifier}_custom_level-XXX`
 
-**Example:** `"level-001"`, `"level-042", "fili5_custom_level-053`
+**Example:** `"level-001"`, `"level-042"`, `"fili5_custom_level-053"`
 
 ### `title` (string, required)
 Display name of the level shown to users.
@@ -44,6 +45,11 @@ Detailed description explaining the level's purpose and learning objectives.
 
 Defines memory modules available in the level. Each memory object has:
 
+#### `id` (string, required)
+Unique identifier for this memory module. Used to reference the memory in completion conditions.
+
+**Example:** `"mem_shared"`, `"mem_private"`
+
 #### `size` (string, required)
 Memory dimensions in format `"rows x columns"`.
 
@@ -56,6 +62,7 @@ Reference to a memory state defined in `memoryStates`. If omitted, memory starts
 ```json
 "memory": [
   {
+    "id": "mem_shared",
     "size": "32x8",
     "initialState": "initial1"
   }
@@ -71,7 +78,7 @@ Reference to a memory state defined in `memoryStates`. If omitted, memory starts
 Defines the CPUs available in the level. Each CPU object has:
 
 #### `id` (string, required)
-Unique identifier for this CPU instance.
+Unique identifier for this CPU instance. Used to reference the CPU in completion conditions.
 
 #### `type` (string, required)
 Reference to a CPU type (either built-in or defined in `newCpuTypes`).
@@ -106,7 +113,7 @@ If `true`, the user cannot edit the CPU's program. Default is `false`.
 
 Defines named memory states that can be referenced by memory modules.
 
-**Format:** Object where keys are state names and values are objects mapping memory addresses to values.
+**Format:** Object where keys are state names and values are objects mapping memory addresses (as strings) to numeric values.
 
 **Example:**
 ```json
@@ -138,7 +145,7 @@ Defines new CPU types or overrides existing ones for this level.
 Each CPU type has:
 
 #### `displayName` (string, required)
-Human-readable cpu name shown in the UI.
+Human-readable CPU name shown in the UI.
 
 #### `arch` (string, required)
 Architecture type. Currently supported: `"one-addr"`
@@ -198,54 +205,114 @@ Assembly code for the program. Use `\n` for line breaks.
 
 ---
 
+## Completion Conditions
+
+### `completionConditions` (array, optional)
+
+Defines the conditions that must be met for the level to be considered complete. All conditions must be satisfied simultaneously.
+
+Each condition has:
+
+#### `type` (string, required)
+Type of condition to check. Supported values:
+- `"memory_value"` - Check a specific memory location
+- `"register_value"` - Check a CPU register value
+
+#### `targetId` (string, required)
+Identifier of the target to check:
+- For `memory_value`: ID of the memory module (e.g., `"mem_shared"`)
+- For `register_value`: ID of the CPU (e.g., `"cpu2"`)
+
+#### `location` (string, required)
+Location within the target to check:
+- For `memory_value`: Memory address as a string (e.g., `"5"`)
+- For `register_value`: Register name (e.g., `"ACC"`, `"PC"`, `"MAR"`)
+
+#### `expectedValue` (number, required)
+The numeric value expected at the specified location for the condition to be satisfied.
+
+**Example:**
+```json
+"completionConditions": [
+  {
+    "type": "memory_value",
+    "targetId": "mem_shared",
+    "location": "5",
+    "expectedValue": 5
+  },
+  {
+    "type": "register_value",
+    "targetId": "cpu2",
+    "location": "ACC",
+    "expectedValue": 5
+  }
+]
+```
+
+In this example, the level is complete when:
+1. Memory address 5 in `mem_shared` contains the value 5, AND
+2. The ACC register of `cpu2` contains the value 5
+
+---
+
 ## Complete Example
 ```json
 {
   "version": 1,
   "id": "level-001",
-  "title": "Introduction to Parallel Processing",
-  "description": "Learn how multiple CPUs can work together on shared memory.",
+  "title": "Educational simulator for multiprocessor systems",
+  "description": "Run multiple CPUs simultaneously, visualize parallel execution, and explore how processors share memory and coordinate tasks.",
   "memory": [
     {
-      "size": "16x16",
-      "initialState": "startup"
+      "id": "mem_shared",
+      "size": "32x8",
+      "initialState": "initial1"
     }
   ],
   "cpus": [
     {
       "id": "cpu1",
-      "type": "simple",
-      "dataProgram": "increment",
-      "locked": false
+      "type": "cpu1",
+      "dataProgram": "test",
+      "locked": true
     },
     {
       "id": "cpu2",
-      "type": "simple",
-      "dataProgram": "decrement",
-      "locked": false
+      "type": "cpu1"
     }
   ],
   "memoryStates": {
-    "startup": {
-      "0": 10,
-      "1": 20
+    "initial1": {
+      "3": 4,
+      "5": 2
     }
   },
   "newCpuTypes": {
-    "simple": {
-      "displayName": "Simple CPU",
+    "cpu1": {
+      "displayName": "Intel 4004",
       "arch": "one-addr",
-      "executionTime": 200
+      "invalidInstructions": ["sub", "add"],
+      "executionTime": 300
     }
   },
   "initialPrograms": [
     {
-      "name": "increment",
-      "code": "LOAD 0\nINC\nSTORE 0\nHALT"
+      "name": "test",
+      "code": "LOAD #5\nLOOP: DEC\nJNZ LOOP"
+    }
+  ],
+  "completionConditions": [
+    {
+      "type": "memory_value",
+      "targetId": "mem_shared",
+      "location": "5",
+      "expectedValue": 5
     },
     {
-      "name": "decrement",
-      "code": "LOAD 1\nDEC\nSTORE 1\nHALT"
+      "type": "register_value",
+      "targetId": "cpu2",
+      "location": "ACC",
+      "expectedValue": 5
     }
   ]
 }

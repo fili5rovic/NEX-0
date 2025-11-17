@@ -17,6 +17,10 @@ class CPU extends EventTarget {
 
         const cpuType = getCpuTypeForAttribute(cpuTypeAttr);
 
+        this.id = cpuElem.getAttribute('id');
+        if(!this.id) {
+            throw Error('ID for cpu not set');
+        }
         this.archType = cpuType.arch;
         this.architecture = archFromString(this.archType);
         this.invalidInstructions = cpuType.invalidInstructions || [];

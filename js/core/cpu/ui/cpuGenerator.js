@@ -27,7 +27,7 @@ export class CpuGenerator {
             const cpuElem = cpus[i];
             cpuElem.innerHTML = this.cpuHtmlArr[i];
             const cpu = new CPU(cpuElem);
-            this.cpuMap.set(i, cpu);
+            this.cpuMap.set(cpu.id, cpu);
 
             cpu.initButtonListeners();
         }

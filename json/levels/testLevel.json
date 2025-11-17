@@ -60,7 +60,7 @@
     },
     {
       "type": "register_value",
-      "targetId" : "cpu1",
+      "targetId" : "cpu2",
       "location": "ACC",
       "expectedValue": 5
     }
